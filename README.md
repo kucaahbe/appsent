@@ -14,7 +14,7 @@ Usage
 Initialize application with config requirements:
 
 	require 'appsent'
-	AppSent.init(:path => 'config') do
+	AppSent.init(:path => 'config', :env => ENV['RACK_ENV']) do
 
 	  # Hash-based config:
 	  mongo_db_config do
