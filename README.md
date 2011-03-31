@@ -20,14 +20,14 @@ Initialize application with config requirements:
 
 	  # Hash-based config:
 	  mongo_db_config do
-	    host :string, :default => 'localhost', :desc => 'Host to connect to MongoDB'
-	    port :integer
-	    pool_size :integer
-	    timeout :integer
+	    host      :type => String, :example => 'localhost', :desc => 'Host to connect to MongoDB'
+	    port      :type => Fixnum
+	    pool_size :type => Fixnum
+	    timeout   :type => Fixnum
 	  end
 
 	  # Array-based config:
-	  exception_notification_recipients :array
+	  exception_notification_recipients :type => Array
 
 	  my_simple_config # config without special requirements, stupid but it can do so, why not?
 	end
