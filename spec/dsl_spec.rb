@@ -40,4 +40,21 @@ describe "AppSent.init" do
     AppSent.config_files.should eq(%w(config1 config2 config3))
   end
 
+  it "should create corresponding constants with values" do
+    AppSent.init(@right_params) do
+      simple_config
+      database do
+	username :type => String
+	password :type => String
+	port     :type => Fixnum
+      end
+
+      simple_config_with_just_type :type => Array
+    end
+
+    AppSent::SIMPLE_CONFIG.should eq({:a=>1, :b=>'2'})
+    AppSent::DATABASE.should eq({:username => 'user', :password => 'pass', :port => 100500})
+    AppSent::SIMPLE_CONFIG_WITH_JUST_TYPE.should eq([1,2,3])
+  end
+
 end

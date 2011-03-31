@@ -3,9 +3,9 @@ require 'appsent/config_file'
 
 class AppSent
 
-  class ConfigPathNotSet < ArgumentError; end
+  class ConfigPathNotSet  < ArgumentError; end
   class EnvironmentNotSet < ArgumentError; end
-  class BlockRequired < StandardError; end
+  class BlockRequired     < StandardError; end
 
   @@config_path  = nil
   @@environment  = nil
@@ -20,7 +20,9 @@ class AppSent
     @@config_path = File.expand_path(File.join(File.dirname(caller_filename),opts[:path]))
     @@environment = opts[:env]
 
-    self.new.instance_exec(&block)
+    settings = self.new
+    settings.instance_exec(&block)
+    settings.load! if settings.all_valid?
   end
 
   def self.config_files
@@ -31,7 +33,14 @@ class AppSent
     @@config_path
   end
 
-  def method_missing method, &block
+  def all_valid?
+    @@config_files.map { |config_file| ConfigFile.new(@@config_path,config_file,@@environment) }.any? { |conf_file| conf_file.valid? }
+  end
+
+  def load!
+  end
+
+  def method_missing method, *args, &block
     @@config_files << method.to_s
   end
 
