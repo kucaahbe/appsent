@@ -16,7 +16,7 @@ class AppSent
     raise EnvironmentNotSet unless opts[:env]
     raise BlockRequired     unless block_given?
 
-    caller_filename =  caller.first[/^(.*):\d+:.*$/,1]
+    caller_filename =  caller.first.split(':').first
     @@config_path = File.expand_path(File.join(File.dirname(caller_filename),opts[:path]))
     @@environment = opts[:env]
 
