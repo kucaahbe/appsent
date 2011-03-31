@@ -18,7 +18,7 @@ describe AppSent do
     end
 
     it "should require block" do
-      expect { AppSent.init(@right_params) do; end }.to raise_exception(AppSent::EnvironmentNotSet)
+      expect { AppSent.init(@right_params) }.to raise_exception(AppSent::BlockRequired)
     end
 
     it "should save config path to @@config_path" do
@@ -29,6 +29,15 @@ describe AppSent do
     it "should save environment to @@environment" do
       AppSent.init(@right_params) do; end
       AppSent.class_variable_get(:@@environment).should eq('test')
+    end
+
+    it "should save array of configs to @@configs" do
+      AppSent.init(@right_params) do
+	config1
+	config2
+	config3
+      end
+      AppSent.class_variable_get(:@@config_files).should eq(%w(config1 config2 config3))
     end
 
   end
