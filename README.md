@@ -5,8 +5,10 @@ Description
 -----------
 
 In every application (especially big apps, where a lot of people working on it) you need
-many config files, where settings for different environments (development, test, and production as minimum),
-and you every time use own solution and blabla finish this propaganda...
+to have many config files, where settings for different environments (development, test, and production as minimum),
+and without some settings there application will fail, and sometime it takes long time to find  where was mistake.
+This gem provides easy way to handle loading different config files, validations for necessary config values, in a such way:
+your application will not start until you fill all needed settings, and when you done you will have access to every your in a convenient way.
 
 Usage
 -----
