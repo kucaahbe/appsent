@@ -40,4 +40,21 @@ describe "AppSent.init" do
     AppSent.config_files.should eq(%w(config1 config2 config3))
   end
 
+  context AppSent::ConfigFile do
+
+    subject { described_class }
+
+    it "TODO"
+
+  end
+
+  context AppSent::ConfigValue do
+
+    subject { described_class }
+
+    it "should raise exception if unsupported type passed" do
+      expect { subject.new(:some_wrong_type) }.to raise_exception(/unsupported data type: :some_wrong_type\. Data types you should use: \[ (.*,?)+ \]/)
+    end
+  end
+
 end

@@ -30,4 +30,17 @@ class AppSent
   def method_missing method, &block
     @@config_files << method.to_s
   end
+
+  class ConfigValue
+    SUPPORTED_TYPES=[:integer, :string, :array]
+
+    def initialize(type)
+      type=type.to_sym
+      # TODO make constant (look at http://apidock.com/ruby/YAML)
+      raise "unsupported data type: #{type.inspect}. Data types you should use: [ #{SUPPORTED_TYPES.join(', ')} ]" unless SUPPORTED_TYPES.include?(type)
+    end
+  end
+
+  class ConfigFile < ConfigValue
+  end
 end
