@@ -19,6 +19,14 @@ class AppSent
     self.new.instance_exec(&block)
   end
 
+  def self.config_files
+    @@config_files
+  end
+
+  def self.config_path
+    @@config_path
+  end
+
   def method_missing method, &block
     @@config_files << method.to_s
   end
