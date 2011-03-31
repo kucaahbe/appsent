@@ -14,6 +14,10 @@ describe AppSent::ConfigValue do
       expect { subject.new('parameter','asd','data') }.to raise_exception(/data type should be ruby class!/)
     end
 
+    it "should raise exception if type is not hash and block given" do
+      pending('move to shared examples')
+    end
+
   end
 
   context "#valid?" do

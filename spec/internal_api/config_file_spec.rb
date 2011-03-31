@@ -8,18 +8,34 @@ describe AppSent::ConfigFile do
     @params = ['/path/to/config','config_name',:environment]
   end
 
+  context ".new" do
+
+    it "should raise exception if type is not hash and block given" do
+      pending
+    end
+
+  end
+
   context "#valid?" do
 
     context "should be true" do
 
-      it "if config exists and environment presence(without type)" do
+      it "if config exists and environment presence(without type)(no values)" do
 	YAML.should_receive(:load_file).once.with('/path/to/config/config_name').and_return('environment' => {:a=>100500})
 	subject.new(*@params).should be_valid
       end
 
-      it "if config exists and environment presence(with type specified)" do
+      it "if config exists and environment presence(with type specified)(no values)" do
 	YAML.should_receive(:load_file).once.with('/path/to/config/config_name').and_return(:environment => [1,2,3])
 	subject.new(*@params,Array).should be_valid
+      end
+
+      it "if config exists and environment presence(with values)" do
+	values_block = lambda {
+	  value :type => String
+	}
+	YAML.should_receive(:load_file).once.with('/path/to/config/config_name').and_return('environment' => {:value=>'100500'})
+	subject.new(*@params,values_block).should be_valid
       end
 
     end
