@@ -20,5 +20,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_development_dependency 'yard'
+  s.add_development_dependency 'BlueCloth'
+  s.add_development_dependency 'RedCloth'
   s.add_development_dependency 'rspec'
 end
