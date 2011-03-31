@@ -5,3 +5,5 @@ pkg/*
 
 .yardoc/
 doc/
+
+.rvmrc
