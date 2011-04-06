@@ -33,15 +33,26 @@ class AppSent
     @@config_path
   end
 
+  def initialize
+    @configs=[]
+  end
+
   def all_valid?
-    @@config_files.map { |config_file| ConfigFile.new(@@config_path,config_file,@@environment,Hash) }.any? { |conf_file| conf_file.valid? }
+    @configs.all? { |conf_file| conf_file.valid? }
   end
 
   def load!
+    @configs.each do |config|
+      self.class.const_set(config.constantized,config.data)
+    end
   end
 
-  def method_missing method, *args, &block
-    @@config_files << method.to_s
+  private
+
+  def method_missing config, args={}, &block
+    config = config.to_s
+    @@config_files << config
+    @configs << ConfigFile.new(@@config_path,config,@@environment,args[:type],&block)
   end
 
 end
