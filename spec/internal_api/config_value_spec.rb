@@ -11,11 +11,13 @@ describe AppSent::ConfigValue do
   context ".new" do
 
     it "should raise exception if unsupported type passed" do
-      expect { subject.new('parameter','asd','data') }.to raise_exception(/data type should be ruby class!/)
+      expect { subject.new('parameter','asd','data',nil,nil) }.to raise_exception(/data type should be ruby class!/)
     end
 
     it "should raise exception if type is not hash and block given" do
-      pending('move to shared examples')
+      block = lambda {}
+      @params[1] = Array
+      expect { subject.new(*@params,&block) }.to raise_exception(/params Array and block given/)
     end
 
   end
@@ -25,11 +27,20 @@ describe AppSent::ConfigValue do
     context "should return false" do
 
       it "if entry does not presence in config file" do
-	subject.new('paramname',String,nil).should_not be_valid
+	subject.new('paramname',String,nil,nil,nil).should_not be_valid
       end
 
       it "if data in config file has wrong type" do
-	subject.new('paramname',String,2).should_not be_valid
+	subject.new('paramname',String,2,nil,nil).should_not be_valid
+      end
+
+      it "if child value is not valid" do
+	@params[1]=Hash
+	@params[2]={:value => 100500}
+	values_block = lambda {
+	  value :type => String
+	}
+	subject.new(*@params,&values_block).should_not be_valid
       end
 
     end
@@ -38,6 +49,15 @@ describe AppSent::ConfigValue do
 
       it "if entry presence and has right type" do
 	subject.new(*@params).should be_valid
+      end
+
+      it "if valid itself and shild values valid too" do
+	@params[1]=Hash
+	@params[2]={'value' => 'some data'}
+	values_block = lambda {
+	  value :type => String
+	}
+	subject.new(*@params,&values_block).should be_valid
       end
 
     end

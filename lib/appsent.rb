@@ -34,7 +34,7 @@ class AppSent
   end
 
   def all_valid?
-    @@config_files.map { |config_file| ConfigFile.new(@@config_path,config_file,@@environment) }.any? { |conf_file| conf_file.valid? }
+    @@config_files.map { |config_file| ConfigFile.new(@@config_path,config_file,@@environment,Hash) }.any? { |conf_file| conf_file.valid? }
   end
 
   def load!

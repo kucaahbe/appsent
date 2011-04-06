@@ -5,13 +5,15 @@ describe AppSent::ConfigFile do
   subject { described_class }
 
   before :each do
-    @params = ['/path/to/config','config_name',:environment]
+    @params = ['/path/to/config','config_name',:environment, Hash]
   end
 
   context ".new" do
 
     it "should raise exception if type is not hash and block given" do
-      pending
+      block = lambda {}
+      @params[-1] = Array
+      expect { subject.new(*@params,&block) }.to raise_exception(/params Array and block given/)
     end
 
   end
@@ -26,8 +28,9 @@ describe AppSent::ConfigFile do
       end
 
       it "if config exists and environment presence(with type specified)(no values)" do
+	@params[-1]=Array
 	YAML.should_receive(:load_file).once.with('/path/to/config/config_name').and_return(:environment => [1,2,3])
-	subject.new(*@params,Array).should be_valid
+	subject.new(*@params).should be_valid
       end
 
       it "if config exists and environment presence(with values)" do
@@ -35,7 +38,7 @@ describe AppSent::ConfigFile do
 	  value :type => String
 	}
 	YAML.should_receive(:load_file).once.with('/path/to/config/config_name').and_return('environment' => {:value=>'100500'})
-	subject.new(*@params,values_block).should be_valid
+	subject.new(*@params,&values_block).should be_valid
       end
 
     end
@@ -51,7 +54,7 @@ describe AppSent::ConfigFile do
       end
 
       it "if wrong type" do
-	@params << Array
+	@params[-1] = Array
 	YAML.should_receive(:load_file).once.with('/path/to/config/config_name').and_return(:environment => 123)
       end
 

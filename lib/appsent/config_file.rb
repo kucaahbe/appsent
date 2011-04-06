@@ -2,15 +2,12 @@ class AppSent
   class ConfigFile
     attr_reader :data
 
-    def initialize config_dir, config_file_name, environment, type=Hash, &block
-      @config_dir, @config_file_name, @environment = config_dir, config_file_name, (environment.to_sym rescue environment)
-      if type.is_a?(Proc)
-	@type = Hash
-	@block = type
-      else
-	@type = type
-	@block = block if block
-      end
+    def initialize config_dir, config_file_name, environment, type, &block
+      @config_dir, @config_file_name, @environment, @type, @block = config_dir, config_file_name, (environment.to_sym rescue environment), type, block
+
+
+      @type ||= Hash
+      raise "params #{@type} and block given" if block_given? and not @type==Hash
     end
 
     def valid?
@@ -41,8 +38,8 @@ class AppSent
       @options ||= []
     end
 
-    def method_missing option, opts={}
-      self.options << ConfigValue.new(option.to_s, opts[:type], @data[option.to_sym], opts[:desc], opts[:example])
+    def method_missing option, opts={}, &block
+      self.options << ConfigValue.new(option.to_s, opts[:type], @data[option.to_sym], opts[:desc], opts[:example], &block)
     end
   end
 end
