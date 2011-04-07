@@ -1,3 +1,4 @@
+require 'appsent/tools'
 require 'appsent/config_value'
 require 'appsent/config_file'
 

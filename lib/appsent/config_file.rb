@@ -12,22 +12,13 @@ class AppSent
 
     def valid?
       yaml_data = YAML.load_file(File.join(@config_dir,@config_file_name+'.yml'))
-
-      if Hash.respond_to?(:symbolize_keys!)
-	yaml_data.symbolize_keys!
-      else
-	yaml_data.keys.each { |key| yaml_data[(key.to_sym rescue key) || key] = yaml_data.delete(key) }
-      end
+      yaml_data.symbolize_keys!
 
       @data = yaml_data[@environment]
 
 
       if @data.instance_of?(@type)
-	if Hash.respond_to?(:symbolize_keys!)
-	  @data.symbolize_keys!
-	else
-	  @data.keys.each { |key| @data[(key.to_sym rescue key) || key] = @data.delete(key) }
-	end if @type==Hash
+	@data.symbolize_keys! if @type==Hash
 	if @block
 	  self.instance_exec(&@block)
 	  options.all? { |option| option.valid? }
@@ -48,6 +39,8 @@ class AppSent
     def constantized
       @config_file_name.upcase
     end
+
+    private
 
     def method_missing option, opts={}, &block
       self.options << ConfigValue.new(option.to_s, opts[:type], @data[option.to_sym], opts[:desc], opts[:example], &block)

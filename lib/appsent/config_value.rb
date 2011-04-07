@@ -18,11 +18,7 @@ class AppSent
     def valid?
       if data.instance_of?(data_type)
 	if @block
-	  if Hash.respond_to?(:symbolize_keys!)
-	    data.symbolize_keys!
-	  else
-	    data.keys.each { |key| data[(key.to_sym rescue key) || key] = data.delete(key) }
-	  end
+	  data.symbolize_keys!
 	  self.instance_exec(&@block)
 	  child_options.any? { |option| option.valid? }
 	else
@@ -31,10 +27,6 @@ class AppSent
       else
 	false
       end
-    end
-
-    def valids?
-      valid?
     end
 
     def child_options
@@ -48,6 +40,8 @@ class AppSent
       msg += (data ? VALUE_WRONG_TYPE_MSG % [data_type] : VALUE_NOT_EXISTS_MSG)
       msg += "(example::  #{parameter}: #{example})" if example
     end
+
+    private
 
     def method_missing option, opts={}
       self.child_options << self.class.new(option.to_s, opts[:type], data[option.to_sym], opts[:desc], opts[:example])
