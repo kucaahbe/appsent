@@ -7,3 +7,5 @@ pkg/*
 doc/
 
 .rvmrc
+
+tmp
