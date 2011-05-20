@@ -1,31 +1,76 @@
-Feature: AppSent error messages
+Feature: Workflow with APPSENT
   As ruby developer
-  In order to organize couple of config files
+  In order to organize couple of config files in my app
   I am using appsent
 
-  Background:
-    Given new rails application
-    And I append to "config/application.rb" with:
+  Scenario: I see errors, fix them and run app!
+    Given a file named "my_app.rb" with:
     """
-    AppSent.init :path => 'settings', :env => Rails.env.to_s do
-    end
-    """
-    #And a file named "config/settings/system.yml" with:
-    #"""
-    #todo
-    #"""
-    #And a file named "config/settings/system.yml" with:
-    #"""
-    #todo
-    #"""
-    #And a file named "config/settings/system.yml" with:
-    #"""
-    #todo
-    #"""
+    require 'appsent'
 
-  Scenario: I see errors and fix them
-    When I run `rails server`
+    AppSent.init :path => 'config', :env => 'production' do
+      mongodb do
+        host      :type => String, :example => 'localhost', :desc => 'Host to connect to MongoDB'
+        port      :type => Fixnum, :example => 27017,       :desc => 'MongoDB port'
+        pool_size :type => Fixnum
+        timeout   :type => Fixnum
+      end
+    end
+
+    puts 'All stuff work!'
+    """
+
+    When I run `ruby my_app.rb`
     Then the output should contain:
     """
-    todo
+    AppSent::Error: missing config file 'config/mongodb.yml'
+    """
+
+    When I add file named "config/mongodb.yml"
+    And I run `ruby my_app.rb`
+    Then the output should contain:
+    """
+    AppSent::Error: config file 'config/mongodb.yml' has no 'production' environment
+    """
+
+    When I append to "config/mongodb.yml" with:
+    """
+    production:
+    """
+    And I run `ruby my_app.rb`
+    Then the output should contain:
+    """
+    AppSent::Error: config file 'config/mongodb.yml' has missing or wrong type parameters:
+      host(String, default: 'localhost'): Host to connect to MongoDB
+      post(Fixnum, default: 27017): MongoDB port
+      pool_size(Fixnum)
+      timeout(Fixnum)
+    """
+
+    When I append to "config/mongodb.yml" with:
+    """
+      host: 100500
+      port: 27017
+      pool_size: 1
+      timeout: 5
+    """
+    And I run `ruby my_app.rb`
+    Then the output should contain:
+    """
+    AppSent::Error: config file 'config/mongodb.yml' has missing (or wrong type) parameters:
+      host(String, default: 'localhost'): Host to connect to MongoDB
+    """
+
+    When I write to "config/mongodb.yml" following:
+    """
+    production:
+      host: 100500
+      port: 27017
+      pool_size: 1
+      timeout: 5
+    """
+    And I run `ruby my_app.rb`
+    Then the output should contain:
+    """
+    All stuff work!
     """

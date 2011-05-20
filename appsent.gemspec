@@ -24,5 +24,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'RedCloth'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'aruba'
-  s.add_development_dependency 'rails', '~> 3.0.6'
 end
