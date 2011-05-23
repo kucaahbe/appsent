@@ -10,6 +10,10 @@ describe AppSent::ConfigValue do
 
   context ".new" do
 
+    %w(valid? child_options error_message).each do |method|
+      it { subject.new(*@params).should respond_to(method)}
+    end
+
     it "should raise exception if unsupported type passed" do
       expect { subject.new('parameter','asd','data',nil,nil) }.to raise_exception(/data type should be ruby class!/)
     end

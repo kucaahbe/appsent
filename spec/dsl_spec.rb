@@ -60,3 +60,13 @@ describe "AppSent.init" do
   end
 
 end
+
+describe 'AppSent.new' do
+
+  subject { AppSent.new }
+
+  %w(all_valid? load! full_error_message).each do |method|
+    it { should respond_to(method) }
+  end
+
+end

@@ -11,6 +11,10 @@ describe AppSent::ConfigFile do
 
   context ".new" do
 
+    %w(valid? options constantized error_message).each do |method|
+      it { subject.new(*@params).should respond_to(method)}
+    end
+
     it "should raise exception if type is not hash and block given" do
       block = lambda {}
       @params[-1] = Array
