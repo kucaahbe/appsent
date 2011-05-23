@@ -32,11 +32,13 @@ describe "AppSent.init" do
   end
 
   it "should save array of configs to @@configs" do
-    AppSent.init(@right_params) do
-      config1
-      config2
-      config3
-    end
+    expect {
+      AppSent.init(@right_params) do
+	config1
+	config2
+	config3
+      end
+    }.to raise_exception(AppSent::Error)
     AppSent.config_files.should eq(%w(config1 config2 config3))
   end
 

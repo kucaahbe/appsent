@@ -21,16 +21,16 @@ Feature: Workflow with APPSENT
     """
 
     When I run `ruby my_app.rb`
-    Then the output should contain:
+    Then the output should contain following appsent error:
     """
-    AppSent::Error: missing config file 'config/mongodb.yml'
+    missing config file 'config/mongodb.yml'
     """
 
     When I add file named "config/mongodb.yml"
     And I run `ruby my_app.rb`
-    Then the output should contain:
+    Then the output should contain following appsent error:
     """
-    AppSent::Error: config file 'config/mongodb.yml' has no 'production' environment
+    config file 'config/mongodb.yml' has no 'production' environment
     """
 
     When I append to "config/mongodb.yml" with:
@@ -38,9 +38,9 @@ Feature: Workflow with APPSENT
     production:
     """
     And I run `ruby my_app.rb`
-    Then the output should contain:
+    Then the output should contain following appsent error:
     """
-    AppSent::Error: config file 'config/mongodb.yml' has missing or wrong type parameters:
+    config file 'config/mongodb.yml' has missing or wrong type parameters:
       host(String, default: 'localhost'): Host to connect to MongoDB
       post(Fixnum, default: 27017): MongoDB port
       pool_size(Fixnum)
@@ -55,9 +55,9 @@ Feature: Workflow with APPSENT
       timeout: 5
     """
     And I run `ruby my_app.rb`
-    Then the output should contain:
+    Then the output should contain following appsent error:
     """
-    AppSent::Error: config file 'config/mongodb.yml' has missing (or wrong type) parameters:
+    config file 'config/mongodb.yml' has missing (or wrong type) parameters:
       host(String, default: 'localhost'): Host to connect to MongoDB
     """
 
