@@ -5,6 +5,7 @@ class AppSent
     VALUE_NOT_EXISTS_MSG       = "does not exist"
     VALUE_WRONG_TYPE_MSG       = "wrong type,should be %s"
 
+    # data => it's an actual data of parameter
     def initialize parameter, data_type, data, description, example, &block
       @parameter, @data_type, @data, @description, @example = (parameter.to_sym rescue parameter), data_type, data, description, example
 
@@ -34,11 +35,12 @@ class AppSent
     end
 
     def error_message
-      msg  = parameter.to_s
-      msg += "(#{description})" if description
-      msg += ' => '
-      msg += (data ? VALUE_WRONG_TYPE_MSG % [data_type] : VALUE_NOT_EXISTS_MSG)
-      msg += "(example::  #{parameter}: #{example})" if example
+      msg  = "#{parameter}: "
+      msg += "#{example}" if example
+      msg += " # "
+      msg += "#{description} " if description
+      msg += "(#{data_type.inspect})"
+      #msg += (data ? VALUE_WRONG_TYPE_MSG % [data_type] : VALUE_NOT_EXISTS_MSG)
     end
 
     private

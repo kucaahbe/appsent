@@ -7,6 +7,7 @@ class AppSent
   class ConfigPathNotSet  < ArgumentError; end
   class EnvironmentNotSet < ArgumentError; end
   class BlockRequired     < StandardError; end
+  class Error             < LoadError;     end
 
   @@config_path  = nil
   @@environment  = nil
@@ -23,7 +24,11 @@ class AppSent
 
     settings = self.new
     settings.instance_exec(&block)
-    settings.load! if settings.all_valid?
+    if settings.all_valid?
+      settings.load!
+    else
+      raise AppSent::Error, settings.full_error_message
+    end
   end
 
   def self.config_files
@@ -46,6 +51,14 @@ class AppSent
     @configs.each do |config|
       self.class.const_set(config.constantized,config.data)
     end
+  end
+
+  def full_error_message
+    error_description = ''
+    @configs.each do |config|
+      error_description += config.error_message+"\n" unless config.valid?
+    end
+    "failed to load some configuration files\n"+error_description
   end
 
   private

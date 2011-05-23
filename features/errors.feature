@@ -36,15 +36,16 @@ Feature: Workflow with APPSENT
     When I append to "config/mongodb.yml" with:
     """
     production:
+      optional_value: temp
     """
     And I run `ruby my_app.rb`
     Then the output should match following appsent error:
     """
     config file '[a-z/]+/config/mongodb.yml' has missing or wrong type parameters:
-      host(String, default: 'localhost'): Host to connect to MongoDB
-      post(Fixnum, default: 27017): MongoDB port
-      pool_size(Fixnum)
-      timeout(Fixnum)
+      host: 'localhost'  # Host to connect to MongoDB (String)
+      port: 27017  # MongoDB port (Fixnum)
+      pool_size:   # (Fixnum)
+      timeout:   # (Fixnum)
     """
 
     When I append to "config/mongodb.yml" with:

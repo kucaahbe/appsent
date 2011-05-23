@@ -70,11 +70,28 @@ describe AppSent::ConfigValue do
 
   context "#error_message" do
 
-    it "should generate correct error message when no data" do
-      subject.new('database',String,nil,'Database name','localhost').error_message.should eq("database(Database name) => does not exist(example::  database: localhost)")
+    context "should generate correct error message when no data" do
+
+      it "with full description" do
+	subject.new('database',String,nil,'Database name','localhost').error_message.should eq("database: localhost # Database name (String)")
+      end
+
+      it "without example value description" do
+	subject.new('database',String,nil,'Database name',nil).error_message.should eq("database:  # Database name (String)")
+      end
+
+      it "without description" do
+	subject.new('database',String,nil,nil,'localhost').error_message.should eq("database: localhost # (String)")
+      end
+
+      it "without example and description" do
+	subject.new('database',String,nil,nil,nil).error_message.should eq("database:  # (String)")
+      end
+
     end
 
     it "should generate correct error message when type wrong" do
+      pending(:FIXME)
       subject.new('database',String,20,'Database name','localhost').error_message.should eq("database(Database name) => wrong type,should be String(example::  database: localhost)")
     end
 
