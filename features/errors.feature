@@ -27,7 +27,7 @@ Feature: Workflow with APPSENT
     missing config file '[a-z/]+/config/mongodb.yml'
     """
 
-  Scenario: Config has no environment
+  Scenario: Config has no environment(or config is wrong yml file(FIXME))
     When I add file named "config/mongodb.yml"
     And I run `ruby my_app.rb`
     Then the output should match following appsent error:
@@ -35,7 +35,9 @@ Feature: Workflow with APPSENT
     config file '[a-z/]+/config/mongodb.yml' has no 'production' environment
     """
 
-    When I append to "config/mongodb.yml" with:
+    @announce
+  Scenario: required parameteres do not specified
+    When I write to "config/mongodb.yml" with:
     """
     production:
       optional_value: temp
@@ -50,6 +52,7 @@ Feature: Workflow with APPSENT
       timeout:  # (Fixnum)
     """
 
+    @announce
   Scenario: Some parameter is wrong
     When I write to "config/mongodb.yml" following:
     """
@@ -63,7 +66,7 @@ Feature: Workflow with APPSENT
     Then the output should match following appsent error:
     """
     config file '[a-z/]+/config/mongodb.yml' has missing (or wrong type) parameters:
-      host(String, default: 'localhost'): Host to connect to MongoDB
+      host: localhost # Host to connect to MongoDB (String)
     """
 
   Scenario: All config present and have right values
