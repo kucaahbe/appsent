@@ -1,5 +1,5 @@
-APPSENT - awesome config management solution
-============================================
+APPSENT - awesome config management solution [![Build Status](http://travis-ci.org/kucaahbe/appsent.png)](http://travis-ci.org/kucaahbe/appsent)
+================================================================================================================================================
 
 Description
 -----------
