@@ -73,19 +73,19 @@ describe AppSent::ConfigValue do
     context "should generate correct error message when no data" do
 
       it "with full description" do
-	subject.new('database',String,nil,'Database name','localhost').error_message.should eq("database: localhost # Database name (String)")
+	subject.new('database',String,nil,'Database name','localhost').error_message.should eq("  database: localhost # Database name (String)")
       end
 
       it "without example value description" do
-	subject.new('database',String,nil,'Database name',nil).error_message.should eq("database:  # Database name (String)")
+	subject.new('database',String,nil,'Database name',nil).error_message.should eq("  database:  # Database name (String)")
       end
 
       it "without description" do
-	subject.new('database',String,nil,nil,'localhost').error_message.should eq("database: localhost # (String)")
+	subject.new('database',String,nil,nil,'localhost').error_message.should eq("  database: localhost # (String)")
       end
 
       it "without example and description" do
-	subject.new('database',String,nil,nil,nil).error_message.should eq("database:  # (String)")
+	subject.new('database',String,nil,nil,nil).error_message.should eq("  database:  # (String)")
       end
 
     end

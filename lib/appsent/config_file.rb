@@ -14,31 +14,33 @@ class AppSent
     end
 
     def valid?
+      return @checked if defined?(@checked)
+
       path_to_config = File.join(@config_dir,@config_file_name+'.yml')
       yaml_data = YAML.load_file(path_to_config)
       yaml_data.symbolize_keys!
 
       @data = yaml_data[@environment]
 
-      if @data.instance_of?(@type)
-	@data.symbolize_keys! if @type==Hash
-	if @block
-	  self.instance_exec(&@block)
-	  @self_error_msg = WRONG_CONFIG_ERROR_MSG % path_to_config
-	  options.all? { |option| option.valid? }
-	else
-	  true
-	end
-      else
-	false
-      end
+      @checked = if @data.instance_of?(@type)
+		   @data.symbolize_keys! if @type==Hash
+		   if @block
+		     self.instance_exec(&@block)
+		     @self_error_msg = WRONG_CONFIG_ERROR_MSG % path_to_config
+		     options.all? { |option| option.valid? }
+		   else
+		     true
+		   end
+		 else
+		   false
+		 end
     rescue NoMethodError, "undefined method `symbolize_keys!' for false:FalseClass"
       # yaml is not valid YAML file, TODO change error message
       @self_error_msg = ENVIRONMENT_NOT_FOUND_ERROR_MSG % [path_to_config,@environment]
-      false
+      @checked = false
     rescue Errno::ENOENT
       @self_error_msg = CONFIG_NOT_FOUND_ERROR_MSG % path_to_config
-      false
+      @checked = false
     end
 
     def options

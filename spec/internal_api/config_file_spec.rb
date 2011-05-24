@@ -27,9 +27,6 @@ describe AppSent::ConfigFile do
 
     context "should be true" do
 
-      before :each do
-      end
-
       it "if config exists and environment presence(without type)(no values)" do
 	YAML.should_receive(:load_file).once.with(@fake_config_filename).and_return('environment' => {:a=>100500})
 	subject.new(*@params).should be_valid
