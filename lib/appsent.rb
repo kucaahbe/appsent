@@ -58,7 +58,7 @@ class AppSent
     @configs.each do |config|
       error_description += config.error_message+"\n" unless config.valid?
     end
-    "failed to load some configuration files\n"+error_description
+    "failed to load some configuration files\n\n"+error_description
   end
 
   private
