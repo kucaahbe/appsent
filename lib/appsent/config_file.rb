@@ -4,7 +4,7 @@ class AppSent
 
     CONFIG_NOT_FOUND_ERROR_MSG      = "missing config file '%s'"
     ENVIRONMENT_NOT_FOUND_ERROR_MSG = "config file '%s' has no '%s' environment"
-    WRONG_CONFIG_ERROR_MSG          = "config file '%s' has missing or wrong type parameters:\n"
+    WRONG_CONFIG_ERROR_MSG          = "wrong config file '%s':\n"
 
     def initialize config_dir, config_file_name, environment, type, &block
       @config_dir, @config_file_name, @environment, @type, @block = config_dir, config_file_name, (environment.to_sym rescue environment), type, block

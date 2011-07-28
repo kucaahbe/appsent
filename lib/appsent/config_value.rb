@@ -2,9 +2,11 @@ class AppSent
   class ConfigValue
     attr_reader :parameter, :data_type, :data, :description, :example
     attr_accessor :nesting
+
     WRONG_DATA_TYPE_PASSED_MSG = "data type should be ruby class!"
-    VALUE_NOT_EXISTS_MSG       = "does not exist"
+    VALUE_NOT_EXISTS_MSG       = "does not exists"
     VALUE_WRONG_TYPE_MSG       = "wrong type,should be %s"
+    FULL_ERROR_MESSAGE         = "%s: %s # %s%s%s"
 
     # data => it's an actual data of parameter
     def initialize parameter, data_type, data, description, example, &block
@@ -38,13 +40,10 @@ class AppSent
     end
 
     def error_message
-      msg  = '  '*(self.nesting+1)
-      msg += "#{parameter}: "
-      msg += "#{example}" if example
-      msg += " # "
-      msg += "#{description} " if description
-      msg += "(#{data_type.inspect})"
-      #msg += (data ? VALUE_WRONG_TYPE_MSG % [data_type] : VALUE_NOT_EXISTS_MSG)
+      desc = (description and "(#{description})")
+      actual_error_msg = (data ? VALUE_WRONG_TYPE_MSG % [data_type] : VALUE_NOT_EXISTS_MSG)
+      optional_type = (data ? '' : ', '+data_type.inspect)
+      '  '*(self.nesting+1)+FULL_ERROR_MESSAGE % [parameter, example, actual_error_msg, desc, optional_type]
     end
 
     private

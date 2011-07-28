@@ -73,26 +73,41 @@ describe AppSent::ConfigValue do
     context "should generate correct error message when no data" do
 
       it "with full description" do
-	subject.new('database',String,nil,'Database name','localhost').error_message.should eq("  database: localhost # Database name (String)")
+	subject.new('database',String,nil,'Database name','localhost').error_message.should eq("  database: localhost # does not exists(Database name), String")
       end
 
-      it "without example value description" do
-	subject.new('database',String,nil,'Database name',nil).error_message.should eq("  database:  # Database name (String)")
+      it "without example value" do
+	subject.new('database',String,nil,'Database name',nil).error_message.should eq("  database:  # does not exists(Database name), String")
       end
 
       it "without description" do
-	subject.new('database',String,nil,nil,'localhost').error_message.should eq("  database: localhost # (String)")
+	subject.new('database',String,nil,nil,'localhost').error_message.should eq("  database: localhost # does not exists, String")
       end
 
       it "without example and description" do
-	subject.new('database',String,nil,nil,nil).error_message.should eq("  database:  # (String)")
+	subject.new('database',String,nil,nil,nil).error_message.should eq("  database:  # does not exists, String")
       end
 
     end
 
-    it "should generate correct error message when type wrong" do
-      pending(:FIXME)
-      subject.new('database',String,20,'Database name','localhost').error_message.should eq("database(Database name) => wrong type,should be String(example::  database: localhost)")
+    context "should generate correct error message when no data is of wrong type" do
+
+      it "with full description" do
+	subject.new('database',String,20,'Database name','localhost').error_message.should eq("  database: localhost # wrong type,should be String(Database name)")
+      end
+
+      it "without example value" do
+	subject.new('database',String,20,'Database name',nil).error_message.should eq("  database:  # wrong type,should be String(Database name)")
+      end
+
+      it "without description" do
+	subject.new('database',String,20,nil,'localhost').error_message.should eq("  database: localhost # wrong type,should be String")
+      end
+
+      it "without example and description" do
+	subject.new('database',String,20,nil,nil).error_message.should eq("  database:  # wrong type,should be String")
+      end
+
     end
 
   end
