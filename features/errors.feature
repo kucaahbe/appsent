@@ -22,17 +22,17 @@ Feature: Workflow with APPSENT
 
   Scenario: config does not exists
     When I run `ruby my_app.rb`
-    Then the output should match following appsent error:
+    Then the output should contain:
     """
-    missing config file '[a-z/]+/config/mongodb.yml'
+    missing config file 'config/mongodb.yml'
     """
 
   Scenario: Config has no environment(or config is wrong yml file(FIXME))
     When I add file named "config/mongodb.yml"
     And I run `ruby my_app.rb`
-    Then the output should match following appsent error:
+    Then the output should contain:
     """
-    config file '[a-z/]+/config/mongodb.yml' has no 'production' environment
+    config file 'config/mongodb.yml' has no 'production' environment
     """
 
     @announce
@@ -43,13 +43,13 @@ Feature: Workflow with APPSENT
       optional_value: temp
     """
     And I run `ruby my_app.rb`
-    Then the output should match following appsent error:
+    Then the output should contain:
     """
-    config file '[a-z/]+/config/mongodb.yml' has missing or wrong type parameters:
-      host: localhost # Host to connect to MongoDB (String)
-      port: 27017 # MongoDB port (Fixnum)
-      pool_size:  # (Fixnum)
-      timeout:  # (Fixnum)
+    wrong config file 'config/mongodb.yml':
+      host: localhost # does not exists(Host to connect to MongoDB), String
+      port: 27017 # does not exists(MongoDB port), Fixnum
+      pool_size:  # does not exists, Fixnum
+      timeout:  # does not exists, Fixnum
     """
 
     @announce
@@ -63,10 +63,10 @@ Feature: Workflow with APPSENT
       timeout: 5
     """
     And I run `ruby my_app.rb`
-    Then the output should match following appsent error:
+    Then the output should contain:
     """
-    config file '[a-z/]+/config/mongodb.yml' has missing (or wrong type) parameters:
-      host: localhost # Host to connect to MongoDB (String)
+    wrong config file 'config/mongodb.yml':
+      host: 100500 # wrong type,should be String(Host to connect to MongoDB)
     """
 
   Scenario: All config present and have right values
