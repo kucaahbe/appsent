@@ -11,13 +11,13 @@ class AppSent
 
       @type ||= Hash
       raise "params #{@type} and block given" if block_given? and not @type==Hash
+      @path_to_config = File.join(@config_dir,@config_file_name+'.yml')
     end
 
     def valid?
       return @checked if defined?(@checked)
 
-      path_to_config = File.join(@config_dir,@config_file_name+'.yml')
-      yaml_data = YAML.load_file(path_to_config)
+      yaml_data = YAML.load_file(@path_to_config)
       yaml_data.symbolize_keys!
 
       @data = yaml_data[@environment]
@@ -26,7 +26,7 @@ class AppSent
 		   @data.symbolize_keys! if @type==Hash
 		   if @block
 		     self.instance_exec(&@block)
-		     @self_error_msg = WRONG_CONFIG_ERROR_MSG % path_to_config
+		     @self_error_msg = WRONG_CONFIG_ERROR_MSG % relative_path_to_config
 		     options.all? { |option| option.valid? }
 		   else
 		     true
@@ -36,10 +36,10 @@ class AppSent
 		 end
     rescue NoMethodError, "undefined method `symbolize_keys!' for false:FalseClass"
       # yaml is not valid YAML file, TODO change error message
-      @self_error_msg = ENVIRONMENT_NOT_FOUND_ERROR_MSG % [path_to_config,@environment]
+      @self_error_msg = ENVIRONMENT_NOT_FOUND_ERROR_MSG % [relative_path_to_config,@environment]
       @checked = false
     rescue Errno::ENOENT
-      @self_error_msg = CONFIG_NOT_FOUND_ERROR_MSG % path_to_config
+      @self_error_msg = CONFIG_NOT_FOUND_ERROR_MSG % relative_path_to_config
       @checked = false
     end
 
@@ -56,6 +56,10 @@ class AppSent
     end
 
     private
+
+    def relative_path_to_config
+      @path_to_config.gsub(Dir.pwd+File::SEPARATOR,'')
+    end
 
     def method_missing option, opts={}, &block
       self.options << ConfigValue.new(option.to_s, opts[:type], @data[option.to_sym], opts[:desc], opts[:example], &block)
