@@ -43,7 +43,7 @@ class AppSent
       desc = (description and "(#{description})")
       actual_error_msg = (data ? VALUE_WRONG_TYPE_MSG % [data_type] : VALUE_NOT_EXISTS_MSG)
       optional_type = (data ? '' : ', '+data_type.inspect)
-      '  '*(self.nesting+1)+FULL_ERROR_MESSAGE % [parameter, example, actual_error_msg, desc, optional_type]
+      '  '*(self.nesting+1)+FULL_ERROR_MESSAGE % [parameter, (data or example), actual_error_msg, desc, optional_type]
     end
 
     private
