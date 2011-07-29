@@ -53,13 +53,16 @@ Feature: Usage example
     missing config file 'config/mongodb.yml'
     """
 
-  Scenario: Config has no environment(or config is wrong yml file(FIXME))
+  Scenario: Config has no environment
     When I add file named "config/mongodb.yml"
     And I run `ruby my_app.rb`
     Then the output should contain:
     """
     config file 'config/mongodb.yml' has no 'production' environment
     """
+
+  Scenario: Nested parametres wrong
+  Scenario: Array parametres wrong
 
   Scenario: required parameteres do not specified
     When I write to "config/mongodb.yml" with:
