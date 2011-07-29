@@ -6,3 +6,13 @@ class Hash
     end
   end
 end
+
+class Array
+  def ask_all? &block
+    result = []
+    self.each do |el|
+      result << block.call(el)
+    end
+    result.all?
+  end
+end
