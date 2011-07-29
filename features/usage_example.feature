@@ -1,7 +1,9 @@
-Feature: Workflow with APPSENT
+Feature: Usage example
   As ruby developer
-  In order to organize couple of config files in my app
-  I am using appsent
+
+  I want my application to start only when all config files exist and have right values
+
+  and in this case I am using appsent
 
   Background:
     Given a file named "my_app.rb" with:
