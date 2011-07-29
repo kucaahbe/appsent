@@ -10,7 +10,7 @@ class AppSent
 
     # data => it's an actual data of parameter
     def initialize parameter, data_type, data, description, example, &block
-      @parameter, @data_type, @data, @description, @example = (parameter.to_sym rescue parameter), data_type, data, description, example
+      @parameter, @data_type, @data, @description, @example = (parameter and parameter.to_sym), data_type, data, description, example
 
       @data_type ||= Hash
       raise WRONG_DATA_TYPE_PASSED_MSG unless @data_type.is_a?(Class)

@@ -12,6 +12,7 @@ class AppSent
       @type ||= Hash
       raise "params #{@type} and block given" if block_given? and not @type==Hash
       @path_to_config = File.join(@config_dir,@config_file_name+'.yml')
+      @self_error_msg = ''
     end
 
     def valid?
