@@ -55,7 +55,7 @@ describe AppSent::ConfigValue do
 	subject.new(*@params).should be_valid
       end
 
-      it "if valid itself and shild values valid too" do
+      it "if valid itself and child values valid too" do
 	@params[1]=Hash
 	@params[2]={'value' => 'some data'}
 	values_block = lambda {

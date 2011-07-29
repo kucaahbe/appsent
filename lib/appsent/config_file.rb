@@ -52,7 +52,7 @@ class AppSent
     end
 
     def error_message
-      @self_error_msg += options.map { |o| o.error_message }.join("\n")
+      @self_error_msg += options.map { |o| o.valid? ? nil : o.error_message }.compact.join("\n")
     end
 
     private
