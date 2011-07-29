@@ -28,7 +28,7 @@ describe "AppSent.init" do
 
   it "should save environment to @@environment" do
     AppSent.init(@right_params) do; end
-    AppSent.class_variable_get(:@@environment).should eq('test')
+    AppSent.send(:class_variable_get,:@@environment).should eq('test')
   end
 
   it "should save array of configs to @@configs" do
