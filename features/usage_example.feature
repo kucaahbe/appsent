@@ -16,6 +16,11 @@ Feature: Usage example
         port      :type => Fixnum, :example => 27017,       :desc => 'MongoDB port'
         pool_size :type => Fixnum
         timeout   :type => Fixnum
+
+	slaves :type => Array do
+	  host    :type => String, :example => 'host.com', :desc => 'mongo slave host'
+	  port    :type => Fixnum, :example => 27018,      :desc => 'mongo slave port'
+	end
       end
     end
 
