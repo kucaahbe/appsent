@@ -93,19 +93,19 @@ describe AppSent::ConfigValue do
     context "should generate correct error message when no data is of wrong type" do
 
       it "with full description" do
-	subject.new('database',String,20,'Database name','localhost').error_message.should eq("  database: localhost # wrong type,should be String(Database name)")
+	subject.new('database',String,20,'Database name','localhost').error_message.should eq("  database: 20 # wrong type,should be String(Database name)")
       end
 
       it "without example value" do
-	subject.new('database',String,20,'Database name',nil).error_message.should eq("  database:  # wrong type,should be String(Database name)")
+	subject.new('database',String,20,'Database name',nil).error_message.should eq("  database: 20 # wrong type,should be String(Database name)")
       end
 
       it "without description" do
-	subject.new('database',String,20,nil,'localhost').error_message.should eq("  database: localhost # wrong type,should be String")
+	subject.new('database',String,20,nil,'localhost').error_message.should eq("  database: 20 # wrong type,should be String")
       end
 
       it "without example and description" do
-	subject.new('database',String,20,nil,nil).error_message.should eq("  database:  # wrong type,should be String")
+	subject.new('database',String,20,nil,nil).error_message.should eq("  database: 20 # wrong type,should be String")
       end
 
     end
