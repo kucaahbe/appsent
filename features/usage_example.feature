@@ -37,7 +37,6 @@ Feature: Usage example
     config file 'config/mongodb.yml' has no 'production' environment
     """
 
-    @announce
   Scenario: required parameteres do not specified
     When I write to "config/mongodb.yml" with:
     """
@@ -54,7 +53,6 @@ Feature: Usage example
       timeout:  # does not exists, Fixnum
     """
 
-    @announce
   Scenario: Some parameter is wrong
     When I write to "config/mongodb.yml" following:
     """
