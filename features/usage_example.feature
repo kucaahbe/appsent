@@ -11,17 +11,36 @@ Feature: Usage example
     require 'appsent'
 
     AppSent.init :path => 'config', :env => 'production' do
+      system_config do
+
+        google_analytics do
+          code              :type => String, :example => 'UA-12345678-1', :desc => 'Enter your google analytics code here'
+          multiple_domains  :type => Boolean, :desc => 'has multiple domains?'
+          domain            :type => String, :example => 'example.com', :desc => 'your domain'
+        end
+
+        system_email :type => String, :example => 'admin@example.com'
+
+      end
+
+      #recaptcha :skip_env => true do
+      #  recaptcha_public_key  :type => String, :desc => 'Recaptcha public key'
+      #  recaptcha_private_key :type => String, :desc => 'Recaptcha private key'
+      #end
+
       mongodb do
         host      :type => String, :example => 'localhost', :desc => 'Host to connect to MongoDB'
         port      :type => Fixnum, :example => 27017,       :desc => 'MongoDB port'
         pool_size :type => Fixnum
         timeout   :type => Fixnum
 
-	slaves :type => Array do
-	  host    :type => String, :example => 'host.com', :desc => 'mongo slave host'
-	  port    :type => Fixnum, :example => 27018,      :desc => 'mongo slave port'
-	end
+        slaves :type => Array do
+          host    :type => String, :example => 'host.com', :desc => 'mongo slave host'
+          port    :type => Fixnum, :example => 27018,      :desc => 'mongo slave port'
+        end
       end
+
+      #notification_recipients :type => Array, :skip_env => true, :each_value => TODO
     end
 
     puts 'All stuff work!'
