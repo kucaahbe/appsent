@@ -27,7 +27,7 @@ class AppSent
 		   if @block
 		     self.instance_exec(&@block)
 		     @self_error_msg = WRONG_CONFIG_ERROR_MSG % relative_path_to_config
-		     options.all? { |option| option.valid? }
+		     options.ask_all? { |option| option.valid? }
 		   else
 		     true
 		   end

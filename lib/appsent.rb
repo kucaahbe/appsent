@@ -44,7 +44,7 @@ class AppSent
   end
 
   def all_valid?
-    @configs.all? { |conf_file| conf_file.valid? }
+    @configs.ask_all? { |conf_file| conf_file.valid? }
   end
 
   def load!
