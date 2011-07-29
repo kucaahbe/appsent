@@ -18,7 +18,13 @@ class AppSent
       return @checked if defined?(@checked)
 
       yaml_data = YAML.load_file(@path_to_config)
-      yaml_data.symbolize_keys!
+      if yaml_data.is_a?(Hash)
+	yaml_data.symbolize_keys!
+      else
+	# yaml is not valid YAML file, TODO change error message
+	@self_error_msg = ENVIRONMENT_NOT_FOUND_ERROR_MSG % [relative_path_to_config,@environment]
+	return @checked = false
+      end
 
       @data = yaml_data[@environment]
 
@@ -34,10 +40,6 @@ class AppSent
 		 else
 		   false
 		 end
-    rescue NoMethodError, "undefined method `symbolize_keys!' for false:FalseClass"
-      # yaml is not valid YAML file, TODO change error message
-      @self_error_msg = ENVIRONMENT_NOT_FOUND_ERROR_MSG % [relative_path_to_config,@environment]
-      @checked = false
     rescue Errno::ENOENT
       @self_error_msg = CONFIG_NOT_FOUND_ERROR_MSG % relative_path_to_config
       @checked = false
