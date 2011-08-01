@@ -24,16 +24,30 @@ class AppSent
       return @valid if defined?(@valid)
 
       @valid = if data.instance_of?(data_type)
-		   if @block
-		     data.symbolize_keys!
-		     self.instance_exec(&@block)
-		     child_options.ask_all? { |option| option.valid? }
-		   else
-		     true
-		   end
-		 else
-		   false
-		 end
+                 if @block
+                   if data.is_a?(Array)
+                     data.each do |data|
+                       child_options << self.class.new(
+                         @parameter,
+                         Hash,
+                         data,
+                         @description,
+                         @example,
+                         &@block
+                       )
+                     end
+                   else
+                     data.symbolize_keys!
+                     self.instance_exec(&@block)
+                   end
+
+                   child_options.ask_all? { |option| option.valid? }
+                 else
+                   true
+                 end
+               else
+                 false
+               end
     end
 
     def child_options
