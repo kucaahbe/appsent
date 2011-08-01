@@ -26,10 +26,8 @@ Initialize application with config requirements:
 	    timeout   :type => Fixnum
 	  end
 
-	  # Array-based config(TODO:block non-required):
 	  exception_notification_recipients :type => Array
 
-	  my_simple_config # config without special requirements, stupid but it can do so, why not?
 	end
 
 Access to config values performs in a such way:
