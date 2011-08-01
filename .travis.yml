@@ -3,8 +3,3 @@ rvm:
   - 1.9.2
   - ree
 script: "bundle exec rake spec features"
-branches:
-  only:
-    - master
-  except:
-    - develop
