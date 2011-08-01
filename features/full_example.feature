@@ -1,4 +1,4 @@
-Feature: Usage example
+Feature: Complex usage
 
   Background:
     Given a file named "my_app.rb" with:
@@ -55,8 +55,6 @@ Feature: Usage example
     """
     config file 'config/mongodb.yml' has no 'production' environment
     """
-
-  Scenario: Array parametres wrong
 
   Scenario: required parameteres do not specified
     When I write to "config/mongodb.yml" with:
