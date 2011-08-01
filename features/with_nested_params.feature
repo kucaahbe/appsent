@@ -33,7 +33,7 @@ Feature: Usage with nested params example
       google_analytics:  # does not exists, Hash
     """
 
-    @announce
+    @announce @wip
   Scenario: Nested parameters are wrong
     When I write to "config/system_config.yml" with:
     """
@@ -51,7 +51,7 @@ Feature: Usage with nested params example
         domain: example.com # your domain(String)
     """
 
-    @announce
+    @announce @wip
   Scenario: Some nested parameters are wrong type
     When I write to "config/system_config.yml" with:
     """
@@ -69,7 +69,7 @@ Feature: Usage with nested params example
         code: 100500 # wrong type,should be String(Enter your google analytics code here)
     """
 
-    @announce
+    @announce @wip
   Scenario: All right
     When I write to "config/system_config.yml" with:
     """

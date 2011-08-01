@@ -88,6 +88,7 @@ Feature: Complex usage
       host: 100500 # wrong type,should be String(Host to connect to MongoDB)
     """
 
+    @wip
   Scenario: All config present and have right values
     When I write to "config/mongodb.yml" following:
     """
