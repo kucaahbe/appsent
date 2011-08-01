@@ -22,6 +22,7 @@ class AppSent
 
     def valid?
       return @valid if defined?(@valid)
+
       @valid = if data.instance_of?(data_type)
 		   if @block
 		     data.symbolize_keys!

@@ -34,6 +34,29 @@ describe AppSent::ConfigValue do
       expect { subject.new('parameter','asd','data',nil,nil) }.to raise_exception(/data type should be ruby class!/)
     end
 
+    context "with &block given" do
+
+      let(:block) do
+	lambda { value :type => String }
+      end
+
+      it "should not raise exception if data type is Array" do
+	@params['type'] = Array
+	expect { subject.new(*params,&block) }.to_not raise_exception(/params Array and block given/)
+      end
+
+      it "should not raise exception if data type is Hash" do
+	@params['type'] = Hash
+	expect { subject.new(*params,&block) }.to_not raise_exception(/params Hash and block given/)
+      end
+
+      it "should raise exception if data type is not Hash" do
+	@params['type'] = Fixnum
+	expect { subject.new(*params,&block) }.to raise_exception(/params Fixnum and block given/)
+      end
+
+    end
+
   end
 
   context "#valid?" do
