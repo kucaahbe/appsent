@@ -9,5 +9,7 @@ task :default => [:spec, :features]
 RSpec::Core::RakeTask.new(:spec)
 
 Cucumber::Rake::Task.new(:features) do |t|
-  t.cucumber_opts = "--format pretty"
+  t.profile = 'default'
+  t.fork = true
 end
+task :cucumber => :features

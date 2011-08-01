@@ -1,0 +1,9 @@
+<%
+features=ENV['FEATURE'] || 'features'
+opts = if ENV['FEATURE']
+         '--format pretty --tags @wip --wip'
+       else
+         '--format progress --tags ~@wip --strict'
+       end
+%>
+default: <%= [opts,features].join(' ') %>
