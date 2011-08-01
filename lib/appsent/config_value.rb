@@ -7,6 +7,7 @@ class AppSent
     VALUE_NOT_EXISTS_MSG       = "does not exists"
     VALUE_WRONG_TYPE_MSG       = "wrong type,should be %s"
     FULL_ERROR_MESSAGE         = "%s: %s # %s%s%s"
+    WRONG_CHILD_OPTIONS_MSG    = "wrong nested parameters"
 
     # data => it's an actual data of parameter
     def initialize parameter, data_type, data, description, example, &block
@@ -41,7 +42,7 @@ class AppSent
                      self.instance_exec(&@block)
                    end
 
-                   child_options.ask_all? { |option| option.valid? }
+                   @child_options_valid = child_options.ask_all? { |option| option.valid? }
                  else
                    true
                  end
@@ -54,10 +55,19 @@ class AppSent
       @options ||= []
     end
 
-    def error_message
-      actual_data_or_example = (data or example)
+    def child_options_valid?
+      return @child_options_valid if defined?(@child_options_valid)
+      true
+    end
 
-      actual_error_msg = (data ? VALUE_WRONG_TYPE_MSG % [data_type] : VALUE_NOT_EXISTS_MSG)
+    def error_message
+      actual_data_or_example = ((data_type==Hash ? '' : data) or example)
+
+      actual_error_msg = if child_options_valid?
+                           (data ? VALUE_WRONG_TYPE_MSG % [data_type] : VALUE_NOT_EXISTS_MSG)
+                         else
+                           WRONG_CHILD_OPTIONS_MSG
+                         end
 
       desc = (description and "(#{description})")
 
