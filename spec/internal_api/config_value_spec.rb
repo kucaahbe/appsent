@@ -69,8 +69,8 @@ describe AppSent::ConfigValue do
 	  @params['type']=Array
 	  @params['value']=[1,2]
 	  values_block = lambda {
-	    value :type => String
-	    value :type => Fixnum
+	    value1 :type => String
+	    value2 :type => Fixnum
 	  }
 	  subject.new(*params,&values_block).should_not be_valid
 	end
@@ -92,6 +92,23 @@ describe AppSent::ConfigValue do
 	  value :type => String
 	}
 	subject.new(*params,&values_block).should be_valid
+      end
+
+      context "with type => Array" do
+
+	it "if actual data is an array of right hashes" do
+	  @params['type']=Array
+	  @params['value']=[
+	    {'value1' =>'qwe', 'value2' => 123 },
+	    {'value1' =>'rty', 'value2' => 456 }
+	  ]
+	  values_block = lambda {
+	    value1 :type => String
+	    value2 :type => Fixnum
+	  }
+	  subject.new(*params,&values_block).should be_valid
+	end
+
       end
 
     end
