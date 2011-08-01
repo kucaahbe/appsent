@@ -21,8 +21,8 @@ class AppSent
     end
 
     def valid?
-      return @checked if defined?(@checked)
-      @checked = if data.instance_of?(data_type)
+      return @valid if defined?(@valid)
+      @valid = if data.instance_of?(data_type)
 		   if @block
 		     data.symbolize_keys!
 		     self.instance_exec(&@block)

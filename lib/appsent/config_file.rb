@@ -16,7 +16,7 @@ class AppSent
     end
 
     def valid?
-      return @checked if defined?(@checked)
+      return @valid if defined?(@valid)
 
       yaml_data = YAML.load_file(@path_to_config)
       if yaml_data.is_a?(Hash)
@@ -24,12 +24,12 @@ class AppSent
       else
 	# yaml is not valid YAML file, TODO change error message
 	@self_error_msg = ENVIRONMENT_NOT_FOUND_ERROR_MSG % [relative_path_to_config,@environment]
-	return @checked = false
+	return @valid = false
       end
 
       @data = yaml_data[@environment]
 
-      @checked = if @data.instance_of?(@type)
+      @valid = if @data.instance_of?(@type)
 		   @data.symbolize_keys! if @type==Hash
 		   if @block
 		     self.instance_exec(&@block)
@@ -43,7 +43,7 @@ class AppSent
 		 end
     rescue Errno::ENOENT
       @self_error_msg = CONFIG_NOT_FOUND_ERROR_MSG % relative_path_to_config
-      @checked = false
+      @valid = false
     end
 
     def options
