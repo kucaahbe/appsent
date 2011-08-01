@@ -1,3 +1,13 @@
+next release
+------------
+
+more simple api:
+
+    mongo_db do
+      host String, "mongodb host" => 'localhost'
+      port Fixnum, "mongo port"
+    end
+
 0.0.3
 -----
 
