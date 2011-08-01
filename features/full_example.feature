@@ -61,7 +61,6 @@ Feature: Usage example
     config file 'config/mongodb.yml' has no 'production' environment
     """
 
-  Scenario: Nested parametres wrong
   Scenario: Array parametres wrong
 
   Scenario: required parameteres do not specified
