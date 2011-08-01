@@ -73,7 +73,12 @@ class AppSent
 
       optional_type = (data ? '' : ', '+data_type.inspect)
 
-      '  '*(self.nesting+1)+FULL_ERROR_MESSAGE % [parameter, actual_data_or_example, actual_error_msg, desc, optional_type]
+      @error_message = '  '*(self.nesting+1)+FULL_ERROR_MESSAGE % [parameter, actual_data_or_example, actual_error_msg, desc, optional_type]
+      if child_options_valid?
+        return @error_message
+      else
+        @error_message += "\n"+child_options.map { |o| o.valid? ? nil : o.error_message }.compact.join("\n")
+      end
     end
 
     private

@@ -33,25 +33,23 @@ Feature: Usage with nested params example
       google_analytics:  # does not exists, Hash
     """
 
-    @announce @wip
-  Scenario: Nested parameters are wrong
+  Scenario: Nested parameters does not specified
     When I write to "config/system_config.yml" with:
     """
     production:
       google_analytics:
         blabla: blabla
+        domain: example.com
     """
     And I run `ruby my_app.rb`
     Then the output should contain:
     """
     wrong config file 'config/system_config.yml':
       google_analytics:  # wrong nested parameters
-        code: UA-12345678-1 # Enter your google analytics code here(String)
-        multiple_domains: true # has multiple domains?(Boolean)
-        domain: example.com # your domain(String)
+        code: UA-12345678-1 # does not exists(Enter your google analytics code here), String
+        multiple_domains:  # does not exists(has multiple domains?), String
     """
 
-    @announce @wip
   Scenario: Some nested parameters are wrong type
     When I write to "config/system_config.yml" with:
     """
@@ -69,14 +67,13 @@ Feature: Usage with nested params example
         code: 100500 # wrong type,should be String(Enter your google analytics code here)
     """
 
-    @announce @wip
   Scenario: All right
     When I write to "config/system_config.yml" with:
     """
     production:
       google_analytics:
         code: ZZ-31234123
-        multiple_domains: false
+        multiple_domains: 'false'
         domain: gopa.sraka.com
     """
     And I run `ruby my_app.rb`
