@@ -55,10 +55,15 @@ class AppSent
     end
 
     def error_message
-      desc = (description and "(#{description})")
+      actual_data_or_example = (data or example)
+
       actual_error_msg = (data ? VALUE_WRONG_TYPE_MSG % [data_type] : VALUE_NOT_EXISTS_MSG)
+
+      desc = (description and "(#{description})")
+
       optional_type = (data ? '' : ', '+data_type.inspect)
-      '  '*(self.nesting+1)+FULL_ERROR_MESSAGE % [parameter, (data or example), actual_error_msg, desc, optional_type]
+
+      '  '*(self.nesting+1)+FULL_ERROR_MESSAGE % [parameter, actual_data_or_example, actual_error_msg, desc, optional_type]
     end
 
     private
