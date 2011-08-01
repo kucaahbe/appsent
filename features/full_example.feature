@@ -1,9 +1,4 @@
 Feature: Usage example
-  As ruby developer
-
-  I want my application to start only when all config files exist and have right values
-
-  and in this case I am using appsent
 
   Background:
     Given a file named "my_app.rb" with:
@@ -23,11 +18,6 @@ Feature: Usage example
 
       end
 
-      #recaptcha :skip_env => true do
-      #  recaptcha_public_key  :type => String, :desc => 'Recaptcha public key'
-      #  recaptcha_private_key :type => String, :desc => 'Recaptcha private key'
-      #end
-
       mongodb do
         host      :type => String, :example => 'localhost', :desc => 'Host to connect to MongoDB'
         port      :type => Fixnum, :example => 27017,       :desc => 'MongoDB port'
@@ -40,11 +30,16 @@ Feature: Usage example
         end
       end
 
-      #notification_recipients :type => Array, :skip_env => true, :each_value => TODO
     end
 
     puts 'All stuff work!'
     """
+      # TODO:
+      #recaptcha :skip_env => true do
+      #  recaptcha_public_key  :type => String, :desc => 'Recaptcha public key'
+      #  recaptcha_private_key :type => String, :desc => 'Recaptcha private key'
+      #end
+      #notification_recipients :type => Array, :skip_env => true, :each_value => TODO
 
   Scenario: config does not exists
     When I run `ruby my_app.rb`
