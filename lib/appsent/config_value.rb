@@ -26,7 +26,7 @@ class AppSent
 		   if @block
 		     data.symbolize_keys!
 		     self.instance_exec(&@block)
-		     child_options.any? { |option| option.valid? }
+		     child_options.ask_all? { |option| option.valid? }
 		   else
 		     true
 		   end
