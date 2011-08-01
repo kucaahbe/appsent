@@ -18,12 +18,6 @@ describe AppSent::ConfigValue do
       expect { subject.new('parameter','asd','data',nil,nil) }.to raise_exception(/data type should be ruby class!/)
     end
 
-    it "should raise exception if type is not hash and block given" do
-      block = lambda {}
-      @params[1] = Array
-      expect { subject.new(*@params,&block) }.to raise_exception(/params Array and block given/)
-    end
-
   end
 
   context "#valid?" do
@@ -45,6 +39,26 @@ describe AppSent::ConfigValue do
 	  value :type => String
 	}
 	subject.new(*@params,&values_block).should_not be_valid
+      end
+
+      context "with type => Array" do
+
+	it "if actual data is not array" do
+	  @params[1]=Array
+	  @params[2]=123
+	  subject.new(*@params).should_not be_valid
+	end
+
+	it "if actual data is an array of wrong hashes" do
+	  @params[1]=Array
+	  @params[2]=[1,2]
+	  values_block = lambda {
+	    value :type => String
+	    value :type => Fixnum
+	  }
+	  subject.new(*@params,&values_block).should_not be_valid
+	end
+
       end
 
     end
