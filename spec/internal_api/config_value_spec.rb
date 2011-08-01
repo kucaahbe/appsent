@@ -5,13 +5,29 @@ describe AppSent::ConfigValue do
   subject { described_class }
 
   before :each do
-    @params = [ 'param_name', String, 'some string', 'description string', 'example string' ]
+    @params = {
+      'name'    => 'param_name',
+      'type'    =>  String,
+      'value'   => 'some string',
+      'desc'    => 'description string',
+      'example' => 'example'
+    }
+  end
+
+  let(:params) do
+    [
+      @params['name'],
+      @params['type'],
+      @params['value'],
+      @params['desc'],
+      @params['example']
+    ]
   end
 
   context ".new" do
 
     %w(valid? child_options error_message).each do |method|
-      it { subject.new(*@params).should respond_to(method)}
+      it { subject.new(*params).should respond_to(method)}
     end
 
     it "should raise exception if unsupported type passed" do
@@ -33,30 +49,30 @@ describe AppSent::ConfigValue do
       end
 
       it "if child value is not valid" do
-	@params[1]=Hash
-	@params[2]={:value => 100500}
+	@params['type']=Hash
+	@params['value']={:value => 100500}
 	values_block = lambda {
 	  value :type => String
 	}
-	subject.new(*@params,&values_block).should_not be_valid
+	subject.new(*params,&values_block).should_not be_valid
       end
 
       context "with type => Array" do
 
 	it "if actual data is not array" do
-	  @params[1]=Array
-	  @params[2]=123
-	  subject.new(*@params).should_not be_valid
+	  @params['type']=Array
+	  @params['value']=123
+	  subject.new(*params).should_not be_valid
 	end
 
 	it "if actual data is an array of wrong hashes" do
-	  @params[1]=Array
-	  @params[2]=[1,2]
+	  @params['type']=Array
+	  @params['value']=[1,2]
 	  values_block = lambda {
 	    value :type => String
 	    value :type => Fixnum
 	  }
-	  subject.new(*@params,&values_block).should_not be_valid
+	  subject.new(*params,&values_block).should_not be_valid
 	end
 
       end
@@ -66,16 +82,16 @@ describe AppSent::ConfigValue do
     context "should return true" do
 
       it "if entry presence and has right type" do
-	subject.new(*@params).should be_valid
+	subject.new(*params).should be_valid
       end
 
       it "if valid itself and child values valid too" do
-	@params[1]=Hash
-	@params[2]={'value' => 'some data'}
+	@params['type']=Hash
+	@params['value']={'value' => 'some data'}
 	values_block = lambda {
 	  value :type => String
 	}
-	subject.new(*@params,&values_block).should be_valid
+	subject.new(*params,&values_block).should be_valid
       end
 
     end
