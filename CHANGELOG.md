@@ -1,3 +1,8 @@
+0.0.3
+-----
+
+fixed nested parameters(issue #3)
+
 0.0.2
 -----
 
