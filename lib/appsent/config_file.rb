@@ -39,6 +39,7 @@ class AppSent
 		     true
 		   end
 		 else
+                   @self_error_msg = (WRONG_CONFIG_ERROR_MSG % relative_path_to_config) + "  '#{@environment}' entry should contain #{@type}"
 		   false
 		 end
     rescue Errno::ENOENT

@@ -24,6 +24,17 @@ Feature: Usage with nested params example
     When I write to "config/system_config.yml" with:
     """
     production:
+      blabla
+    """
+    And I run `ruby my_app.rb`
+    Then the output should contain:
+    """
+    wrong config file 'config/system_config.yml':
+      'production' entry should contain Hash
+    """
+    When I write to "config/system_config.yml" with:
+    """
+    production:
       blabla: blabla
     """
     And I run `ruby my_app.rb`
