@@ -41,14 +41,13 @@ Feature: Complex usage
       #          port    :type => Fixnum, :example => 27018,      :desc => 'mongo slave port'
       #        end
 
-    @wip @announce
   Scenario: All config present and have right values
     When I write to "config/system_config.yml" with:
     """
     production:
       google_analytics:
-        code: 100500
-        multiple_domains: false
+        code: UA-123456
+        multiple_domains: 'false' # FIXME do something with boolean values
         domain: gopa.sraka.com
       system_email: admin@host.com
     """
