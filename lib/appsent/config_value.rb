@@ -14,7 +14,7 @@ class AppSent
 
       @data_type ||= Hash
       raise WRONG_DATA_TYPE_PASSED_MSG unless @data_type.is_a?(Class)
-      raise "params #{@data_type} and block given" if block_given? and not @data_type==Hash
+      raise "params #{@data_type} and block given" if block_given? and not [Array,Hash].include?(@data_type)
 
       @block = block
       @nesting = 0
@@ -50,7 +50,13 @@ class AppSent
     private
 
     def method_missing option, opts={}
-      self.child_options << self.class.new(option.to_s, opts[:type], data[option.to_sym], opts[:desc], opts[:example])
+      self.child_options << self.class.new(
+	option.to_s,
+	opts[:type],
+	data[option.to_sym],
+	opts[:desc],
+	opts[:example]
+      )
       self.child_options.last.nesting+=(self.nesting+1)
     end
   end
