@@ -20,7 +20,7 @@ describe AppSent::ConfigFile do
       @params['config_path'],
       @params['config_name'],
       @params['env'],
-      @params['type']
+      { :type => @params['type'] }
     ]
   end
 

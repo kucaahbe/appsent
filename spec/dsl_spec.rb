@@ -69,8 +69,7 @@ describe AppSent do
         AppSent::ConfigFile.should_receive(:new).once.with(
           File.join(File.dirname(__FILE__),'config'),
           'confname',
-          'env',
-          nil
+          'env'
         ).and_return(mock_config_file)
 
         AppSent.init(:path => 'config', :env => 'env') do
@@ -84,7 +83,6 @@ describe AppSent do
           File.join(File.dirname(__FILE__),'config'),
           'confname',
           'env',
-          nil,
           &block
         ).and_return(mock_config_file)
 
@@ -100,8 +98,7 @@ describe AppSent do
           File.join(File.dirname(__FILE__),'config'),
           'confname',
           'env',
-          nil,
-          true,
+          :skip_env => true,
           &block
         ).and_return(mock_config_file)
 

@@ -63,10 +63,10 @@ class AppSent
 
   private
 
-  def method_missing config, args={}, &block
+  def method_missing config, *args, &block
     config = config.to_s
     @@config_files << config
-    @configs << ConfigFile.new(@@config_path,config,@@environment,args[:type],&block)
+    @configs << ConfigFile.new(@@config_path,config,@@environment,*args,&block)
   end
 
 end
