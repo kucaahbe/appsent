@@ -104,6 +104,76 @@ describe AppSent::ConfigFile do
 
       end
 
+      context "using new API" do
+
+        it "in a simple case" do
+          AppSent::ConfigValue.should_receive(:new).once.with(
+            'username',
+            String,
+            'user',
+            nil,
+            nil
+          ).and_return(mock_config_value)
+
+          AppSent.init(:path => '../fixtures', :env => 'test') do
+            database do
+              username String
+            end
+          end
+        end
+
+        it "with a &block" do
+          block = lambda {}
+          AppSent::ConfigValue.should_receive(:new).once.with(
+            'username',
+            String,
+            'user',
+            nil,
+            nil,
+            &block
+          ).and_return(mock_config_value)
+
+          AppSent.init(:path => '../fixtures', :env => 'test') do
+            database do
+              username String, &block
+            end
+          end
+        end
+
+        it "with description" do
+          AppSent::ConfigValue.should_receive(:new).once.with(
+            'username',
+            String,
+            'user',
+            'description',
+            nil
+          ).and_return(mock_config_value)
+
+          AppSent.init(:path => '../fixtures', :env => 'test') do
+            database do
+              username String, 'description'
+            end
+          end
+        end
+
+        it "with description and example" do
+          AppSent::ConfigValue.should_receive(:new).once.with(
+            'username',
+            String,
+            'user',
+            'description',
+            'user'
+          ).and_return(mock_config_value)
+
+          AppSent.init(:path => '../fixtures', :env => 'test') do
+            database do
+              username String, 'description' => 'user'
+            end
+          end
+        end
+
+      end
+
     end
 
   end
