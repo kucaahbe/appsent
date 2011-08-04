@@ -9,9 +9,9 @@ Feature: Usage with nested params example
       system_config do
 
         google_analytics do
-          code              :type => String, :example => 'UA-12345678-1', :desc => 'Enter your google analytics code here'
-          multiple_domains  :type => String, :desc => 'has multiple domains?'
-          domain            :type => String, :example => 'example.com', :desc => 'your domain'
+          code              String, 'Enter your google analytics code here' => 'UA-12345678-1'
+          multiple_domains  String, 'has multiple domains?'
+          domain            String, 'your domain' => 'example.com'
         end
 
       end

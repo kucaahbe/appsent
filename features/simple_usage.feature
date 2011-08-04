@@ -7,8 +7,8 @@ Feature: Simple usage example
 
     AppSent.init :path => 'config', :env => 'production' do
       mongodb do
-        host  :type => String, :example => 'localhost', :desc => 'Host to connect to MongoDB'
-        port  :type => Fixnum, :example => 27017,       :desc => 'MongoDB port'
+        host  String, 'Host to connect to MongoDB' => 'localhost'
+        port  Fixnum, 'MongoDB port'               => 27017
       end
     end
 

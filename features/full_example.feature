@@ -9,20 +9,20 @@ Feature: Complex usage
       system_config do
 
         google_analytics do
-          code              :type => String, :example => 'UA-12345678-1', :desc => 'Enter your google analytics code here'
-          multiple_domains  :type => String, :desc => 'has multiple domains?'
-          domain            :type => String, :example => 'example.com', :desc => 'your domain'
+          code              String, 'Enter your google analytics code here' => 'UA-12345678-1'
+          multiple_domains  String, 'has multiple domains?'
+          domain            String, 'your domain' => 'example.com'
         end
 
-        system_email :type => String, :example => 'admin@example.com'
+        system_email String, :example => 'admin@example.com'
 
       end
 
       mongodb do
-        host      :type => String, :example => 'localhost', :desc => 'Host to connect to MongoDB'
-        port      :type => Fixnum, :example => 27017,       :desc => 'MongoDB port'
-        pool_size :type => Fixnum
-        timeout   :type => Fixnum
+        host       String, 'Host to connect to MongoDB' => 'localhost'
+        port       Fixnum, 'MongoDB port' => 27017
+        pool_size  Fixnum
+        timeout    Fixnum
       end
 
     end
@@ -31,14 +31,14 @@ Feature: Complex usage
     """
       # TODO:
       #recaptcha :skip_env => true do
-      #  recaptcha_public_key  :type => String, :desc => 'Recaptcha public key'
-      #  recaptcha_private_key :type => String, :desc => 'Recaptcha private key'
+      #  recaptcha_public_key  String, 'Recaptcha public key'
+      #  recaptcha_private_key String, 'Recaptcha private key'
       #end
-      #notification_recipients :type => Array, :skip_env => true, :each_value => TODO
+      #notification_recipients Array, :skip_env => true, :each_value => TODO
       #
       #        slaves :type => Array do
-      #          host    :type => String, :example => 'host.com', :desc => 'mongo slave host'
-      #          port    :type => Fixnum, :example => 27018,      :desc => 'mongo slave port'
+      #          host String, 'mongo slave host' => 'host.com'
+      #          port Fixnum, 'mongo slave port' => 27018
       #        end
 
   Scenario: All config present and have right values

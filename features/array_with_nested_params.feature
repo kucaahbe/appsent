@@ -9,12 +9,12 @@ Feature: Array with nested params
     AppSent.init :path => 'config', :env => 'production' do
 
       mongodb do
-        host      :type => String, :example => 'localhost', :desc => 'Host to connect to MongoDB'
-        port      :type => Fixnum, :example => 27017,       :desc => 'MongoDB port'
+        host      String, 'Host to connect to MongoDB' => 'localhost'
+        port      Fixnum, 'MongoDB port'               => 27017
 
-        slaves :type => Array do
-          host    :type => String, :example => 'host.com', :desc => 'mongo slave host'
-          port    :type => Fixnum, :example => 27018,      :desc => 'mongo slave port'
+        slaves Array do
+          host    String, 'mongo slave host' => 'host.com'
+          port    Fixnum, 'mongo slave port' => 27018
         end
       end
 
