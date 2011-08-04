@@ -54,6 +54,57 @@ describe AppSent do
       AppSent.config_files.should eq(%w(config1 config2 config3))
     end
 
+    context "should send right variables to AppSent::ConfigFile" do
+
+      let(:mock_config_file) { mock(AppSent::ConfigFile, :valid? => true, :constantized => 'STR', :data => 'data') }
+
+      it "in a simple case" do
+        AppSent::ConfigFile.should_receive(:new).once.with(
+          File.join(File.dirname(__FILE__),'config'),
+          'confname',
+          'env',
+          nil
+        ).and_return(mock_config_file)
+
+        AppSent.init(:path => 'config', :env => 'env') do
+          confname
+        end
+      end
+
+      it "with &block" do
+        block = lambda {}
+        AppSent::ConfigFile.should_receive(:new).once.with(
+          File.join(File.dirname(__FILE__),'config'),
+          'confname',
+          'env',
+          nil,
+          &block
+        ).and_return(mock_config_file)
+
+        AppSent.init(:path => 'config', :env => 'env') do
+          confname &block
+        end
+      end
+
+      it "with :skip_env" do
+        pending('unimplemented yet')
+        block = lambda {}
+        AppSent::ConfigFile.should_receive(:new).once.with(
+          File.join(File.dirname(__FILE__),'config'),
+          'confname',
+          'env',
+          nil,
+          true,
+          &block
+        ).and_return(mock_config_file)
+
+        AppSent.init(:path => 'config', :env => 'env') do
+          confname :skip_env => true, &block
+        end
+      end
+
+    end
+
     it "should create corresponding constants with values" do
       AppSent.init(@right_params) do
         simple_config
