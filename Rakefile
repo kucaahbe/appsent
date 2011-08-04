@@ -6,7 +6,17 @@ Bundler::GemHelper.install_tasks
 
 task :default => [:spec, :features]
 
-RSpec::Core::RakeTask.new(:spec)
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.rspec_opts='--tag ~wip'
+end
+
+namespace :spec do
+
+  RSpec::Core::RakeTask.new(:wip) do |t|
+    t.rspec_opts='--tag wip'
+  end
+
+end
 
 Cucumber::Rake::Task.new(:features) do |t|
   t.profile = 'default'

@@ -104,7 +104,7 @@ describe AppSent::ConfigFile do
 
       end
 
-      context "using new API" do
+      context "using new API", :wip => true do
 
         it "in a simple case" do
           AppSent::ConfigValue.should_receive(:new).once.with(
