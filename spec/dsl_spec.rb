@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe AppSent do
 
+  let(:fixtures_path) { File.expand_path(File.join(File.dirname(__FILE__),'fixtures')) }
+
   before :each do
     AppSent.class_variable_set(:@@config_path,nil)
     AppSent.class_variable_set(:@@environment,nil)
@@ -22,7 +24,6 @@ describe AppSent do
 
     before :each do
       @right_params = { :path => 'fixtures', :env => 'test' }
-      @fixtures_path = File.expand_path(File.join(File.dirname(__FILE__),'fixtures'))
     end
 
     it "should require config path" do
@@ -41,7 +42,7 @@ describe AppSent do
 
     it "should save config path to @@config_path" do
       AppSent.init(@right_params) do; end
-      AppSent.config_path.should eq(@fixtures_path)
+      AppSent.config_path.should eq(fixtures_path)
     end
 
     it "should save environment to @@environment" do
