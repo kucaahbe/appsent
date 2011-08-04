@@ -30,6 +30,32 @@ describe AppSent::ConfigFile do
       it { subject.new(*params).should respond_to(method)}
     end
 
+    context "should send right variables to AppSent::ConfigValue" do
+
+      let(:mock_config_value) { mock(AppSent::ConfigValue, :valid? => true) }
+
+      context "using old API" do
+
+        it "in a simple case" do
+          AppSent::ConfigValue.should_receive(:new).once.with(
+            'username',
+            String,
+            'user',
+            nil,
+            nil
+          ).and_return(mock_config_value)
+
+          AppSent.init(:path => '../fixtures', :env => 'test') do
+            database do
+              username :type => String
+            end
+          end
+        end
+
+      end
+
+    end
+
   end
 
   context "#valid?" do

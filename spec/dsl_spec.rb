@@ -2,6 +2,12 @@ require 'spec_helper'
 
 describe AppSent do
 
+  before :each do
+    AppSent.class_variable_set(:@@config_path,nil)
+    AppSent.class_variable_set(:@@environment,nil)
+    AppSent.class_variable_set(:@@config_files,[])
+  end
+
   context ".new" do
 
     subject { AppSent.new }
