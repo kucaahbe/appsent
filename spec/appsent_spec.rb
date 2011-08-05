@@ -110,10 +110,6 @@ describe AppSent do
         end
       end
 
-      after :each do
-        AppSent.send :remove_const, 'STR' if AppSent.const_defined?("STR")
-      end
-
     end
 
     it "should create corresponding constants with values" do
@@ -133,6 +129,12 @@ describe AppSent do
       AppSent::SIMPLE_CONFIG_WITH_JUST_TYPE.should eq([1,2,3])
     end
 
+  end
+
+  after :each do
+    %w( STR SIMPLE_CONFIG DATABASE SIMPLE_CONFIG_WITH_JUST_TYPE ).each do |const|
+      AppSent.send :remove_const, const if AppSent.const_defined?(const)
+    end
   end
 
 end
