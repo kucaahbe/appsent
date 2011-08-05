@@ -33,7 +33,8 @@ describe AppSent::ConfigValue do
     end
 
     it "should raise exception if unsupported type passed" do
-      expect { subject.new('parameter','data', :type => 'asd') }.to raise_exception(/data type should be ruby class!/)
+      @params['type'] = 'asd'
+      expect { subject.new(*params) }.to raise_exception(/data type should be ruby class!/)
     end
 
     context "with &block given" do
@@ -145,42 +146,84 @@ describe AppSent::ConfigValue do
 
   context "#error_message" do
 
+    subject { described_class.new(*params) }
+
     context "should generate correct error message when no data" do
 
       it "with full description" do
-	subject.new('database',nil,:type => String, :desc => 'Database name', :example => 'localhost').error_message.should eq("  database: localhost # does not exists(Database name), String")
+        @params['name'] = 'database'
+        @params['value'] = nil
+        @params['type'] = String
+        @params['desc'] = 'Database name'
+        @params['example'] = 'localhost'
+        subject.error_message.should eq("  database: localhost # does not exists(Database name), String")
       end
 
       it "without example value" do
-	subject.new('database',nil, :type => String, :desc => 'Database name').error_message.should eq("  database:  # does not exists(Database name), String")
+        @params['name'] = 'database'
+        @params['value'] = nil
+        @params['type'] = String
+        @params['desc'] = 'Database name'
+        @params.delete('example')
+        subject.error_message.should eq("  database:  # does not exists(Database name), String")
       end
 
       it "without description" do
-	subject.new('database',nil, :type => String, :example => 'localhost').error_message.should eq("  database: localhost # does not exists, String")
+        @params['name'] = 'database'
+        @params['value'] = nil
+        @params['type'] = String
+        @params.delete('desc')
+        @params['example'] = 'localhost'
+        subject.error_message.should eq("  database: localhost # does not exists, String")
       end
 
       it "without example and description" do
-	subject.new('database',nil, :type => String).error_message.should eq("  database:  # does not exists, String")
+        @params['name'] = 'database'
+        @params['value'] = nil
+        @params['type'] = String
+        @params.delete('desc')
+        @params.delete('example')
+        subject.error_message.should eq("  database:  # does not exists, String")
       end
 
     end
 
-    context "should generate correct error message when no data is of wrong type" do
+    context "should generate correct error message when data is of wrong type" do
 
       it "with full description" do
-	subject.new('database', 20, :type => String, :desc => 'Database name',:example => 'localhost').error_message.should eq("  database: 20 # wrong type,should be String(Database name)")
+        @params['name'] = 'database'
+        @params['value'] = 20
+        @params['type'] = String
+        @params['desc'] = 'Database name'
+        @params['example'] = 'localhost'
+        subject.error_message.should eq("  database: 20 # wrong type,should be String(Database name)")
       end
 
       it "without example value" do
-	subject.new('database', 20, :type => String, :desc => 'Database name').error_message.should eq("  database: 20 # wrong type,should be String(Database name)")
+        @params['name'] = 'database'
+        @params['value'] = 20
+        @params['type'] = String
+        @params['desc'] = 'Database name'
+        @params.delete('example')
+        subject.error_message.should eq("  database: 20 # wrong type,should be String(Database name)")
       end
 
       it "without description" do
-	subject.new('database', 20, :type => String, :example => 'localhost').error_message.should eq("  database: 20 # wrong type,should be String")
+        @params['name'] = 'database'
+        @params['value'] = 20
+        @params['type'] = String
+        @params.delete('desc')
+        @params['example'] = 'localhost'
+        subject.error_message.should eq("  database: 20 # wrong type,should be String")
       end
 
       it "without example and description" do
-	subject.new('database', 20, :type => String).error_message.should eq("  database: 20 # wrong type,should be String")
+        @params['name'] = 'database'
+        @params['value'] = 20
+        @params['type'] = String
+        @params.delete('desc')
+        @params.delete('example')
+        subject.error_message.should eq("  database: 20 # wrong type,should be String")
       end
 
     end
