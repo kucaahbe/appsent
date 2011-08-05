@@ -99,7 +99,7 @@ describe AppSent::ConfigFile do
 
       end
 
-      context "using new API", :wip => true do
+      context "using new API" do
 
         it "in a simple case" do
           AppSent::ConfigValue.should_receive(:new).once.with(
@@ -121,8 +121,6 @@ describe AppSent::ConfigFile do
             'username',
             'user', # data
             String,
-            nil,
-            nil,
             &block
           ).and_return(mock_config_value)
 
@@ -138,8 +136,7 @@ describe AppSent::ConfigFile do
             'username',
             'user', # data
             String,
-            'description',
-            nil
+            'description'
           ).and_return(mock_config_value)
 
           AppSent.init(:path => '../fixtures', :env => 'test') do
@@ -154,8 +151,7 @@ describe AppSent::ConfigFile do
             'username',
             'user', # data
             String,
-            'description',
-            'user'
+            'description' => 'user'
           ).and_return(mock_config_value)
 
           AppSent.init(:path => '../fixtures', :env => 'test') do

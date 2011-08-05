@@ -65,8 +65,8 @@ class AppSent
       @path_to_config.gsub(Dir.pwd+File::SEPARATOR,'')
     end
 
-    def method_missing option, opts={}, &block
-      self.options << ConfigValue.new(option.to_s, opts[:type], @data[option.to_sym], opts[:desc], opts[:example], &block)
+    def method_missing option, *args, &block
+      self.options << ConfigValue.new(option.to_s, @data[option.to_sym], *args, &block)
     end
 
   end
