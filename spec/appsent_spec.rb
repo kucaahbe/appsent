@@ -51,14 +51,17 @@ describe AppSent do
     end
 
     it "should save array of configs to @@configs" do
-      expect {
-        AppSent.init(@right_params) do
-        config1
-        config2
-        config3
+      AppSent.init(@right_params) do
+        simple_config
+        database do
+          username :type => String
+          password :type => String
+          port     :type => Fixnum
         end
-      }.to raise_exception(AppSent::Error)
-      AppSent.config_files.should eq(%w(config1 config2 config3))
+
+        simple_config_with_just_type :type => Array
+      end
+      AppSent.config_files.should eq(%w(simple_config database simple_config_with_just_type))
     end
 
     context "should send right variables to AppSent::ConfigFile" do
