@@ -5,9 +5,9 @@ describe AppSent do
   let(:fixtures_path) { File.expand_path(File.join(File.dirname(__FILE__),'fixtures')) }
 
   before :each do
-    AppSent.class_variable_set(:@@config_path,nil)
-    AppSent.class_variable_set(:@@environment,nil)
-    AppSent.class_variable_set(:@@config_files,[])
+    AppSent.send :class_variable_set,:@@config_path,nil
+    AppSent.send :class_variable_set,:@@environment,nil
+    AppSent.send :class_variable_set,:@@config_files,[]
   end
 
   context ".new" do
