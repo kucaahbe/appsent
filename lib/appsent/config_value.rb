@@ -12,9 +12,9 @@ class AppSent
     # data => it's an actual data of parameter
     def initialize parameter, data, opts={}, &block
       @parameter, @data = (parameter and parameter.to_sym), data
-      #%w( type description example ).each do |deprecated_key|
-      #  warn("AppSent DEPRECATION WARNING: '#{deprecated_key}' is deprecated and will be removed in a future magor release, go to online documentation and see how define config values") if opts.has_key?(deprecated_key.to_sym)
-      #end
+      %w( type desc example ).each do |deprecated_key|
+        warn("AppSent DEPRECATION WARNING: :#{deprecated_key} is deprecated and will be removed in a future major release, go to online documentation and see how to define config values") if opts.has_key?(deprecated_key.to_sym)
+      end
       @data_type, @description, @example = opts[:type], opts[:desc], opts[:example]
 
       @data_type ||= Hash
