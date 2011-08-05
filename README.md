@@ -20,13 +20,13 @@ Initialize application with config requirements:
 
 	  # Hash-based config:
 	  mongo_db_config do
-	    host      :type => String, :example => 'localhost', :desc => 'Host to connect to MongoDB'
-	    port      :type => Fixnum
-	    pool_size :type => Fixnum
-	    timeout   :type => Fixnum
+	    host      String, 'Host to connect to MongoDB' => 'localhost'
+	    port      Fixnum, 'Port to connect to MongoDB'
+	    pool_size Fixnum
+	    timeout   Fixnum
 	  end
 
-	  exception_notification_recipients :type => Array
+	  exception_notification_recipients Array
 
 	end
 
