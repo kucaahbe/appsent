@@ -6,10 +6,11 @@ class AppSent
     ENVIRONMENT_NOT_FOUND_ERROR_MSG = "config file '%s' has no '%s' environment"
     WRONG_CONFIG_ERROR_MSG          = "wrong config file '%s':\n"
 
-    def initialize config_dir, config_file_name, environment, args={}, &block
-      @config_dir, @config_file_name, @environment, @type, @block = config_dir, config_file_name, (environment && environment.to_sym), args[:type], block
+    def initialize config_dir, config_file_name, environment, *opts, &block
+      @config_dir, @config_file_name, @environment, @block = config_dir, config_file_name, (environment && environment.to_sym), block
 
-      @type ||= Hash
+      @type = opts.empty? ? Hash : opts.first
+      @type = @type[:type] if @type.is_a?(Hash)
       raise "params #{@type} and block given" if block_given? and not @type==Hash
       @path_to_config = File.join(@config_dir,@config_file_name+'.yml')
       @self_error_msg = ''

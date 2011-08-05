@@ -10,12 +10,31 @@ class AppSent
     WRONG_CHILD_OPTIONS_MSG    = "wrong nested parameters"
 
     # data => it's an actual data of parameter
-    def initialize parameter, data, opts={}, &block
+    def initialize parameter, data, *opts, &block
       @parameter, @data = (parameter and parameter.to_sym), data
-      %w( type desc example ).each do |deprecated_key|
-        warn("AppSent DEPRECATION WARNING: :#{deprecated_key} is deprecated and will be removed in a future major release, go to online documentation and see how to define config values") if opts.has_key?(deprecated_key.to_sym)
+
+      if opts.size==1
+        opts = opts.first
+        begin
+          %w( type desc example ).each do |deprecated_key|
+            warn("AppSent DEPRECATION WARNING: :#{deprecated_key} is deprecated and will be removed in a future major release, go to online documentation and see how to define config values") if opts.has_key?(deprecated_key.to_sym)
+          end
+
+          @data_type, @description, @example = opts[:type], opts[:desc], opts[:example]
+        rescue NoMethodError# opts is a [String]
+          @data_type = opts
+        end
+      else
+        @data_type = opts.delete_at(0)
+        description_and_example = opts.delete_at(0)
+        case description_and_example
+        when String
+          @description = description_and_example
+        when Hash
+          @description = description_and_example.keys.first
+          @example = description_and_example.values.first
+        end
       end
-      @data_type, @description, @example = opts[:type], opts[:desc], opts[:example]
 
       @data_type ||= Hash
       raise WRONG_DATA_TYPE_PASSED_MSG unless @data_type.is_a?(Class)
@@ -87,11 +106,11 @@ class AppSent
 
     private
 
-    def method_missing option, opts={}, &block
+    def method_missing option, *opts, &block
       self.child_options << self.class.new(
 	option.to_s,
 	data[option.to_sym],
-	opts,
+	*opts,
         &block
       )
       self.child_options.last.nesting+=(self.nesting+1)
