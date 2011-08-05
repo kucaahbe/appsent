@@ -20,7 +20,7 @@ describe AppSent::ConfigFile do
       @params['config_path'],
       @params['config_name'],
       @params['env'],
-      { :type => @params['type'] }
+      @params['type']
     ]
   end
 
@@ -34,133 +34,64 @@ describe AppSent::ConfigFile do
 
       let(:mock_config_value) { mock(AppSent::ConfigValue, :valid? => true) }
 
-      context "using old API(should be removed in future releases)" do
+      it "in a simple case" do
+        AppSent::ConfigValue.should_receive(:new).once.with(
+          'username',
+          'user', # data
+          String
+        ).and_return(mock_config_value)
 
-        it "in a simple case" do
-          AppSent::ConfigValue.should_receive(:new).once.with(
-            'username',
-            'user', # data
-            :type => String
-          ).and_return(mock_config_value)
-
-          AppSent.init(:path => '../fixtures', :env => 'test') do
-            database do
-              username :type => String
-            end
+        AppSent.init(:path => '../fixtures', :env => 'test') do
+          database do
+            username String
           end
         end
-
-        it "with a &block" do
-          block = lambda {}
-          AppSent::ConfigValue.should_receive(:new).once.with(
-            'username',
-            'user', # data
-            :type => String,
-            &block
-          ).and_return(mock_config_value)
-
-          AppSent.init(:path => '../fixtures', :env => 'test') do
-            database do
-              username :type => String, &block
-            end
-          end
-        end
-
-        it "with description" do
-          AppSent::ConfigValue.should_receive(:new).once.with(
-            'username',
-            'user', # data
-            :type => String,
-            :desc => 'description'
-          ).and_return(mock_config_value)
-
-          AppSent.init(:path => '../fixtures', :env => 'test') do
-            database do
-              username :type => String, :desc => 'description'
-            end
-          end
-        end
-
-        it "with description and example" do
-          AppSent::ConfigValue.should_receive(:new).once.with(
-            'username',
-            'user', # data
-            :type => String,
-            :desc => 'description',
-            :example => 'user'
-          ).and_return(mock_config_value)
-
-          AppSent.init(:path => '../fixtures', :env => 'test') do
-            database do
-              username :type => String, :desc => 'description', :example => 'user'
-            end
-          end
-        end
-
       end
 
-      context "using new API" do
+      it "with a &block" do
+        block = lambda {}
+        AppSent::ConfigValue.should_receive(:new).once.with(
+          'username',
+          'user', # data
+          String,
+          &block
+        ).and_return(mock_config_value)
 
-        it "in a simple case" do
-          AppSent::ConfigValue.should_receive(:new).once.with(
-            'username',
-            'user', # data
-            String
-          ).and_return(mock_config_value)
-
-          AppSent.init(:path => '../fixtures', :env => 'test') do
-            database do
-              username String
-            end
+        AppSent.init(:path => '../fixtures', :env => 'test') do
+          database do
+            username String, &block
           end
         end
+      end
 
-        it "with a &block" do
-          block = lambda {}
-          AppSent::ConfigValue.should_receive(:new).once.with(
-            'username',
-            'user', # data
-            String,
-            &block
-          ).and_return(mock_config_value)
+      it "with description" do
+        AppSent::ConfigValue.should_receive(:new).once.with(
+          'username',
+          'user', # data
+          String,
+          'description'
+        ).and_return(mock_config_value)
 
-          AppSent.init(:path => '../fixtures', :env => 'test') do
-            database do
-              username String, &block
-            end
+        AppSent.init(:path => '../fixtures', :env => 'test') do
+          database do
+            username String, 'description'
           end
         end
+      end
 
-        it "with description" do
-          AppSent::ConfigValue.should_receive(:new).once.with(
-            'username',
-            'user', # data
-            String,
-            'description'
-          ).and_return(mock_config_value)
+      it "with description and example" do
+        AppSent::ConfigValue.should_receive(:new).once.with(
+          'username',
+          'user', # data
+          String,
+          'description' => 'user'
+        ).and_return(mock_config_value)
 
-          AppSent.init(:path => '../fixtures', :env => 'test') do
-            database do
-              username String, 'description'
-            end
+        AppSent.init(:path => '../fixtures', :env => 'test') do
+          database do
+            username String, 'description' => 'user'
           end
         end
-
-        it "with description and example" do
-          AppSent::ConfigValue.should_receive(:new).once.with(
-            'username',
-            'user', # data
-            String,
-            'description' => 'user'
-          ).and_return(mock_config_value)
-
-          AppSent.init(:path => '../fixtures', :env => 'test') do
-            database do
-              username String, 'description' => 'user'
-            end
-          end
-        end
-
       end
 
     end
@@ -188,7 +119,7 @@ describe AppSent::ConfigFile do
 
       it "if config exists and environment presence(with values)" do
 	values_block = lambda {
-	  value :type => String
+	  value String
 	}
 	YAML.should_receive(:load_file).once.with(fake_config_filename).and_return('environment' => {:value=>'100500'})
 	subject.new(*params,&values_block).should be_valid

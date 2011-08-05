@@ -15,15 +15,17 @@ describe AppSent::ConfigValue do
   end
 
   let(:params) do
-    [
+    result = [
       @params['name'],
       @params['value'],
-      {
-      :type => @params['type'],
-      :desc =>  @params['desc'],
-      :example => @params['example']
-    }
+      @params['type']
     ]
+    if @params.has_key?('example')
+      result << { @params['desc'] => @params['example'] }
+    else
+      result << @params['desc']
+    end
+    result
   end
 
   context ".new" do
@@ -40,7 +42,7 @@ describe AppSent::ConfigValue do
     context "with &block given" do
 
       let(:block) do
-	lambda { value :type => String }
+	lambda { value String }
       end
 
       it "should not raise exception if data type is Array" do
@@ -81,7 +83,7 @@ describe AppSent::ConfigValue do
 	@params['type']=Hash
 	@params['value']={:value => 100500}
 	values_block = lambda {
-	  value :type => String
+	  value String
 	}
 	subject.new(*params,&values_block).should_not be_valid
       end
@@ -98,8 +100,8 @@ describe AppSent::ConfigValue do
 	  @params['type']=Array
 	  @params['value']=[1,2]
 	  values_block = lambda {
-	    value1 :type => String
-	    value2 :type => Fixnum
+	    value1 String
+	    value2 Fixnum
 	  }
 	  subject.new(*params,&values_block).should_not be_valid
 	end
@@ -118,7 +120,7 @@ describe AppSent::ConfigValue do
 	@params['type']=Hash
 	@params['value']={'value' => 'some data'}
 	values_block = lambda {
-	  value :type => String
+	  value String
 	}
 	subject.new(*params,&values_block).should be_valid
       end
@@ -132,8 +134,8 @@ describe AppSent::ConfigValue do
 	    {'value1' =>'rty', 'value2' => 456 }
 	  ]
 	  values_block = lambda {
-	    value1 :type => String
-	    value2 :type => Fixnum
+	    value1 String
+	    value2 Fixnum
 	  }
 	  subject.new(*params,&values_block).should be_valid
 	end

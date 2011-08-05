@@ -54,12 +54,12 @@ describe AppSent do
       AppSent.init(@right_params) do
         simple_config
         database do
-          username :type => String
-          password :type => String
-          port     :type => Fixnum
+          username String
+          password String
+          port     Fixnum
         end
 
-        simple_config_with_just_type :type => Array
+        simple_config_with_just_type Array
       end
       AppSent.config_files.should eq(%w(simple_config database simple_config_with_just_type))
     end
@@ -120,12 +120,12 @@ describe AppSent do
       AppSent.init(@right_params) do
         simple_config
         database do
-          username :type => String
-          password :type => String
-          port     :type => Fixnum
+          username String
+          password String
+          port     Fixnum
         end
 
-        simple_config_with_just_type :type => Array
+        simple_config_with_just_type Array
       end
 
       AppSent::SIMPLE_CONFIG.should eq({:a=>1, :b=>'2'})
