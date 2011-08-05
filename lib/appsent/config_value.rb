@@ -10,8 +10,12 @@ class AppSent
     WRONG_CHILD_OPTIONS_MSG    = "wrong nested parameters"
 
     # data => it's an actual data of parameter
-    def initialize parameter, data_type, data, description, example, &block
-      @parameter, @data_type, @data, @description, @example = (parameter and parameter.to_sym), data_type, data, description, example
+    def initialize parameter, data, opts={}, &block
+      @parameter, @data = (parameter and parameter.to_sym), data
+      #%w( type description example ).each do |deprecated_key|
+      #  warn("AppSent DEPRECATION WARNING: '#{deprecated_key}' is deprecated and will be removed in a future magor release, go to online documentation and see how define config values") if opts.has_key?(deprecated_key.to_sym)
+      #end
+      @data_type, @description, @example = opts[:type], opts[:desc], opts[:example]
 
       @data_type ||= Hash
       raise WRONG_DATA_TYPE_PASSED_MSG unless @data_type.is_a?(Class)
@@ -83,13 +87,12 @@ class AppSent
 
     private
 
-    def method_missing option, opts={}
+    def method_missing option, opts={}, &block
       self.child_options << self.class.new(
 	option.to_s,
-	opts[:type],
 	data[option.to_sym],
-	opts[:desc],
-	opts[:example]
+	opts,
+        &block
       )
       self.child_options.last.nesting+=(self.nesting+1)
     end

@@ -17,10 +17,12 @@ describe AppSent::ConfigValue do
   let(:params) do
     [
       @params['name'],
-      @params['type'],
       @params['value'],
-      @params['desc'],
-      @params['example']
+      {
+      :type => @params['type'],
+      :desc =>  @params['desc'],
+      :example => @params['example']
+    }
     ]
   end
 
@@ -31,7 +33,7 @@ describe AppSent::ConfigValue do
     end
 
     it "should raise exception if unsupported type passed" do
-      expect { subject.new('parameter','asd','data',nil,nil) }.to raise_exception(/data type should be ruby class!/)
+      expect { subject.new('parameter','data', :type => 'asd') }.to raise_exception(/data type should be ruby class!/)
     end
 
     context "with &block given" do
@@ -64,11 +66,14 @@ describe AppSent::ConfigValue do
     context "should return false" do
 
       it "if entry does not presence in config file" do
-	subject.new('paramname',String,nil,nil,nil).should_not be_valid
+        @params['value']=nil
+	subject.new(*params).should_not be_valid
       end
 
       it "if data in config file has wrong type" do
-	subject.new('paramname',String,2,nil,nil).should_not be_valid
+        @params['type']=Array
+        @params['value']='string'
+	subject.new(*params).should_not be_valid
       end
 
       it "if child value is not valid" do
@@ -80,7 +85,7 @@ describe AppSent::ConfigValue do
 	subject.new(*params,&values_block).should_not be_valid
       end
 
-      context "with type => Array" do
+      context "with type => Array", :wip => true do
 
 	it "if actual data is not array" do
 	  @params['type']=Array
@@ -117,7 +122,7 @@ describe AppSent::ConfigValue do
 	subject.new(*params,&values_block).should be_valid
       end
 
-      context "with type => Array" do
+      context "with type => Array", :wip => true do
 
 	it "if actual data is an array of right hashes" do
 	  @params['type']=Array
@@ -143,19 +148,19 @@ describe AppSent::ConfigValue do
     context "should generate correct error message when no data" do
 
       it "with full description" do
-	subject.new('database',String,nil,'Database name','localhost').error_message.should eq("  database: localhost # does not exists(Database name), String")
+	subject.new('database',nil,:type => String, :desc => 'Database name', :example => 'localhost').error_message.should eq("  database: localhost # does not exists(Database name), String")
       end
 
       it "without example value" do
-	subject.new('database',String,nil,'Database name',nil).error_message.should eq("  database:  # does not exists(Database name), String")
+	subject.new('database',nil, :type => String, :desc => 'Database name').error_message.should eq("  database:  # does not exists(Database name), String")
       end
 
       it "without description" do
-	subject.new('database',String,nil,nil,'localhost').error_message.should eq("  database: localhost # does not exists, String")
+	subject.new('database',nil, :type => String, :example => 'localhost').error_message.should eq("  database: localhost # does not exists, String")
       end
 
       it "without example and description" do
-	subject.new('database',String,nil,nil,nil).error_message.should eq("  database:  # does not exists, String")
+	subject.new('database',nil, :type => String).error_message.should eq("  database:  # does not exists, String")
       end
 
     end
@@ -163,19 +168,19 @@ describe AppSent::ConfigValue do
     context "should generate correct error message when no data is of wrong type" do
 
       it "with full description" do
-	subject.new('database',String,20,'Database name','localhost').error_message.should eq("  database: 20 # wrong type,should be String(Database name)")
+	subject.new('database', 20, :type => String, :desc => 'Database name',:example => 'localhost').error_message.should eq("  database: 20 # wrong type,should be String(Database name)")
       end
 
       it "without example value" do
-	subject.new('database',String,20,'Database name',nil).error_message.should eq("  database: 20 # wrong type,should be String(Database name)")
+	subject.new('database', 20, :type => String, :desc => 'Database name').error_message.should eq("  database: 20 # wrong type,should be String(Database name)")
       end
 
       it "without description" do
-	subject.new('database',String,20,nil,'localhost').error_message.should eq("  database: 20 # wrong type,should be String")
+	subject.new('database', 20, :type => String, :example => 'localhost').error_message.should eq("  database: 20 # wrong type,should be String")
       end
 
       it "without example and description" do
-	subject.new('database',String,20,nil,nil).error_message.should eq("  database: 20 # wrong type,should be String")
+	subject.new('database', 20, :type => String).error_message.should eq("  database: 20 # wrong type,should be String")
       end
 
     end
