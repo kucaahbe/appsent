@@ -107,6 +107,10 @@ describe AppSent do
         end
       end
 
+      after :each do
+        AppSent.send :remove_const, 'STR' if AppSent.const_defined?("STR")
+      end
+
     end
 
     it "should create corresponding constants with values" do

@@ -165,6 +165,10 @@ describe AppSent::ConfigFile do
 
     end
 
+    after :each do
+      AppSent.send :remove_const, 'DATABASE' if AppSent.const_defined?("DATABASE")
+    end
+
   end
 
   context "#valid?" do
