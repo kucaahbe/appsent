@@ -39,10 +39,8 @@ describe AppSent::ConfigFile do
         it "in a simple case" do
           AppSent::ConfigValue.should_receive(:new).once.with(
             'username',
-            String,
-            'user',
-            nil,
-            nil
+            'user', # data
+            :type => String
           ).and_return(mock_config_value)
 
           AppSent.init(:path => '../fixtures', :env => 'test') do
@@ -56,10 +54,8 @@ describe AppSent::ConfigFile do
           block = lambda {}
           AppSent::ConfigValue.should_receive(:new).once.with(
             'username',
-            String,
-            'user',
-            nil,
-            nil,
+            'user', # data
+            :type => String,
             &block
           ).and_return(mock_config_value)
 
@@ -73,10 +69,9 @@ describe AppSent::ConfigFile do
         it "with description" do
           AppSent::ConfigValue.should_receive(:new).once.with(
             'username',
-            String,
-            'user',
-            'description',
-            nil
+            'user', # data
+            :type => String,
+            :desc => 'description'
           ).and_return(mock_config_value)
 
           AppSent.init(:path => '../fixtures', :env => 'test') do
@@ -89,10 +84,10 @@ describe AppSent::ConfigFile do
         it "with description and example" do
           AppSent::ConfigValue.should_receive(:new).once.with(
             'username',
-            String,
-            'user',
-            'description',
-            'user'
+            'user', # data
+            :type => String,
+            :desc => 'description',
+            :example => 'user'
           ).and_return(mock_config_value)
 
           AppSent.init(:path => '../fixtures', :env => 'test') do
@@ -109,10 +104,8 @@ describe AppSent::ConfigFile do
         it "in a simple case" do
           AppSent::ConfigValue.should_receive(:new).once.with(
             'username',
-            String,
-            'user',
-            nil,
-            nil
+            'user', # data
+            String
           ).and_return(mock_config_value)
 
           AppSent.init(:path => '../fixtures', :env => 'test') do
@@ -126,8 +119,8 @@ describe AppSent::ConfigFile do
           block = lambda {}
           AppSent::ConfigValue.should_receive(:new).once.with(
             'username',
+            'user', # data
             String,
-            'user',
             nil,
             nil,
             &block
@@ -143,8 +136,8 @@ describe AppSent::ConfigFile do
         it "with description" do
           AppSent::ConfigValue.should_receive(:new).once.with(
             'username',
+            'user', # data
             String,
-            'user',
             'description',
             nil
           ).and_return(mock_config_value)
@@ -159,8 +152,8 @@ describe AppSent::ConfigFile do
         it "with description and example" do
           AppSent::ConfigValue.should_receive(:new).once.with(
             'username',
+            'user', # data
             String,
-            'user',
             'description',
             'user'
           ).and_return(mock_config_value)
