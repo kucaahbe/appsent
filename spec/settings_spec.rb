@@ -96,7 +96,7 @@ describe AppSent::Settings do
         end
       end
 
-      it "with :skip_env" do
+      it "with :skip_env or :noenv" do
         pending('unimplemented yet')
         block = lambda {}
         AppSent::ConfigFile.should_receive(:new).once.with(
