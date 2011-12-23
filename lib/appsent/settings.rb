@@ -14,7 +14,7 @@ module AppSent
       @@config_path = File.expand_path(File.join(File.dirname(opts[:caller]),opts[:path]))
       @@environment = opts[:env]
 
-      @configs=[]
+      @configs = []
       self.instance_exec(&block)
       if __valid__?
         __load__!
