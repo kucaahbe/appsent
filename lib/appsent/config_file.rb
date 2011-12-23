@@ -18,7 +18,24 @@ module AppSent
 
     def valid?
       return @valid if defined?(@valid)
+      validate!
+    end
 
+    def _options
+      @options ||= []
+    end
+
+    def constantized
+      @config_file_name.upcase
+    end
+
+    def error_message
+      @self_error_msg += self._options.map { |o| o.valid? ? nil : o.error_message }.compact.join("\n")
+    end
+
+    private
+
+    def validate!
       yaml_data = YAML.load_file(@path_to_config)
       if yaml_data.is_a?(Hash)
         yaml_data.symbolize_keys!
@@ -35,7 +52,7 @@ module AppSent
                  if @block
                    self.instance_exec(&@block)
                    @self_error_msg = WRONG_CONFIG_ERROR_MSG % relative_path_to_config
-                   options.ask_all? { |option| option.valid? }
+                   _options.ask_all? { |option| option.valid? }
                  else
                    true
                  end
@@ -48,26 +65,12 @@ module AppSent
       @valid = false
     end
 
-    def options
-      @options ||= []
-    end
-
-    def constantized
-      @config_file_name.upcase
-    end
-
-    def error_message
-      @self_error_msg += options.map { |o| o.valid? ? nil : o.error_message }.compact.join("\n")
-    end
-
-    private
-
     def relative_path_to_config
       @path_to_config.gsub(Dir.pwd+File::SEPARATOR,'')
     end
 
     def method_missing option, *args, &block
-      self.options << ConfigValue.new(option.to_s, @data[option.to_sym], *args, &block)
+      self._options << ConfigValue.new(option.to_s, @data[option.to_sym], *args, &block)
     end
 
   end

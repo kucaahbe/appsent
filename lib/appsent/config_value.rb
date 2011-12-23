@@ -13,27 +13,15 @@ module AppSent
     def initialize parameter, data, *opts, &block
       @parameter, @data = (parameter and parameter.to_sym), data
 
-      if opts.size==1
-        opts = opts.first
-        begin
-          %w( type desc example ).each do |deprecated_key|
-            warn("AppSent DEPRECATION WARNING: :#{deprecated_key} is deprecated and will be removed in a future major release, go to online documentation and see how to define config values") if opts.has_key?(deprecated_key.to_sym)
-          end
+      @data_type = opts.delete_at(0)
 
-          @data_type, @description, @example = opts[:type], opts[:desc], opts[:example]
-        rescue NoMethodError# opts is a [String]
-          @data_type = opts
-        end
-      else
-        @data_type = opts.delete_at(0)
-        description_and_example = opts.delete_at(0)
-        case description_and_example
-        when String
-          @description = description_and_example
-        when Hash
-          @description = description_and_example.keys.first
-          @example = description_and_example.values.first
-        end
+      description_and_example = opts.delete_at(0)
+      case description_and_example
+      when String
+        @description = description_and_example
+      when Hash
+        @description = description_and_example.keys.first
+        @example = description_and_example.values.first
       end
 
       @data_type ||= Hash
@@ -46,32 +34,7 @@ module AppSent
 
     def valid?
       return @valid if defined?(@valid)
-
-      @valid = if data.instance_of?(data_type)
-                 if @block
-                   if data.is_a?(Array)
-                     data.each do |data|
-                       child_options << self.class.new(
-                         @parameter,
-                         Hash,
-                         data,
-                         @description,
-                         @example,
-                         &@block
-                       )
-                     end
-                   else
-                     data.symbolize_keys!
-                     self.instance_exec(&@block)
-                   end
-
-                   @child_options_valid = child_options.ask_all? { |option| option.valid? }
-                 else
-                   true
-                 end
-               else
-                 false
-               end
+      validate!
     end
 
     def child_options
@@ -105,6 +68,34 @@ module AppSent
     end
 
     private
+
+    def validate!
+      @valid = if data.instance_of?(data_type)
+                 if @block
+                   if data.is_a?(Array)
+                     data.each do |data|
+                       child_options << self.class.new(
+                         @parameter,
+                         Hash,
+                         data,
+                         @description,
+                         @example,
+                         &@block
+                       )
+                     end
+                   else
+                     data.symbolize_keys!
+                     self.instance_exec(&@block)
+                   end
+
+                   @child_options_valid = child_options.ask_all? { |option| option.valid? }
+                 else
+                   true
+                 end
+               else
+                 false
+               end
+    end
 
     def method_missing option, *opts, &block
       self.child_options << self.class.new(
