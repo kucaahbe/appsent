@@ -158,7 +158,7 @@ describe AppSent::ConfigValue do
         @params['type']    = String
         @params['desc']    = 'Database name'
         @params['example'] = 'localhost'
-        subject.error_message.should eq("  database: localhost # does not exists(Database name), String")
+        subject.error_message.should eq("  database: localhost # does not exist(Database name), String")
       end
 
       it "without example value" do
@@ -167,7 +167,7 @@ describe AppSent::ConfigValue do
         @params['type']    = String
         @params['desc']    = 'Database name'
         @params.delete('example')
-        subject.error_message.should eq("  database:  # does not exists(Database name), String")
+        subject.error_message.should eq("  database:  # does not exist(Database name), String")
       end
 
       it "without description" do
@@ -176,7 +176,7 @@ describe AppSent::ConfigValue do
         @params['type']    = String
         @params.delete('desc')
         @params['example'] = 'localhost'
-        subject.error_message.should eq("  database: localhost # does not exists, String")
+        subject.error_message.should eq("  database: localhost # does not exist, String")
       end
 
       it "without example and description" do
@@ -185,7 +185,7 @@ describe AppSent::ConfigValue do
         @params['type']    = String
         @params.delete('desc')
         @params.delete('example')
-        subject.error_message.should eq("  database:  # does not exists, String")
+        subject.error_message.should eq("  database:  # does not exist, String")
       end
 
     end
