@@ -42,7 +42,7 @@ describe AppSent::ConfigFile do
           String
         ).and_return(mock_config_value)
 
-        AppSent.init(:path => fixtures_path, :env => 'test') do
+        AppSent::Settings.new(:path => fixtures_path, :env => 'test') do
           database do
             username String
           end
@@ -58,7 +58,7 @@ describe AppSent::ConfigFile do
           &block
         ).and_return(mock_config_value)
 
-        AppSent.init(:path => fixtures_path, :env => 'test') do
+        AppSent::Settings.new(:path => fixtures_path, :env => 'test') do
           database do
             username String, &block
           end
@@ -73,7 +73,7 @@ describe AppSent::ConfigFile do
           'description'
         ).and_return(mock_config_value)
 
-        AppSent.init(:path => fixtures_path, :env => 'test') do
+        AppSent::Settings.new(:path => fixtures_path, :env => 'test') do
           database do
             username String, 'description'
           end
@@ -88,7 +88,7 @@ describe AppSent::ConfigFile do
           'description' => 'user'
         ).and_return(mock_config_value)
 
-        AppSent.init(:path => fixtures_path, :env => 'test') do
+        AppSent::Settings.new(:path => fixtures_path, :env => 'test') do
           database do
             username String, 'description' => 'user'
           end

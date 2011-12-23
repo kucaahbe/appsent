@@ -1,4 +1,4 @@
-class AppSent
+module AppSent
   class ConfigValue
     attr_reader :parameter, :data_type, :data, :description, :example
     attr_accessor :nesting

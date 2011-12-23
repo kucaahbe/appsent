@@ -1,4 +1,4 @@
-class AppSent
+module AppSent
   class ConfigFile
     attr_reader :data
 

@@ -1,18 +1,20 @@
 require 'spec_helper'
 
-describe AppSent do
+describe AppSent::Settings do
+
+  subject { described_class }
 
   let(:fixtures_path) { File.expand_path(File.join(File.dirname(__FILE__),'fixtures')) }
 
   before :each do
-    AppSent.send :class_variable_set,:@@config_path,nil
-    AppSent.send :class_variable_set,:@@environment,nil
-    AppSent.send :class_variable_set,:@@config_files,[]
+    subject.send :class_variable_set,:@@config_path,nil
+    subject.send :class_variable_set,:@@environment,nil
+    subject.send :class_variable_set,:@@config_files,[]
   end
 
   context ".new" do
 
-    subject { AppSent.new }
+    subject { described_class.new(:env=>'production',:path => '/etc') do end; }
 
     %w(all_valid? load! full_error_message).each do |method|
       it { should respond_to(method) }
@@ -20,7 +22,7 @@ describe AppSent do
 
   end
 
-  context ".init" do
+  context ".new" do
 
     before :each do
       @right_params = { :path => 'fixtures', :env => 'test' }
@@ -28,30 +30,30 @@ describe AppSent do
 
     it "should require config path" do
       @right_params.delete(:path)
-      expect { AppSent.init(@right_params) do; end }.to raise_exception(AppSent::ConfigPathNotSet)
+      expect { subject.new(@right_params) do; end }.to raise_exception(AppSent::ConfigPathNotSet)
     end
 
     it "should require environment variable" do
       @right_params.delete(:env)
-      expect { AppSent.init(@right_params) do; end }.to raise_exception(AppSent::EnvironmentNotSet)
+      expect { subject.new(@right_params) do; end }.to raise_exception(AppSent::EnvironmentNotSet)
     end
 
     it "should require block" do
-      expect { AppSent.init(@right_params) }.to raise_exception(AppSent::BlockRequired)
+      expect { subject.new(@right_params) }.to raise_exception(AppSent::BlockRequired)
     end
 
     it "should save config path to @@config_path" do
-      AppSent.init(@right_params) do; end
-      AppSent.config_path.should eq(fixtures_path)
+      subject.new(@right_params) do; end
+      subject.config_path.should eq(fixtures_path)
     end
 
     it "should save environment to @@environment" do
-      AppSent.init(@right_params) do; end
-      AppSent.send(:class_variable_get,:@@environment).should eq('test')
+      subject.new(@right_params) do; end
+      subject.send(:class_variable_get,:@@environment).should eq('test')
     end
 
     it "should save array of configs to @@configs" do
-      AppSent.init(@right_params) do
+      subject.new(@right_params) do
         simple_config
         database do
           username String
@@ -61,7 +63,7 @@ describe AppSent do
 
         simple_config_with_just_type Array
       end
-      AppSent.config_files.should eq(%w(simple_config database simple_config_with_just_type))
+      subject.config_files.should eq(%w(simple_config database simple_config_with_just_type))
     end
 
     context "should send right variables to AppSent::ConfigFile" do
@@ -75,7 +77,7 @@ describe AppSent do
           'env'
         ).and_return(mock_config_file)
 
-        AppSent.init(:path => 'config', :env => 'env') do
+        subject.new(:path => 'config', :env => 'env') do
           confname
         end
       end
@@ -89,7 +91,7 @@ describe AppSent do
           &block
         ).and_return(mock_config_file)
 
-        AppSent.init(:path => 'config', :env => 'env') do
+        subject.new(:path => 'config', :env => 'env') do
           confname &block
         end
       end
@@ -105,7 +107,7 @@ describe AppSent do
           &block
         ).and_return(mock_config_file)
 
-        AppSent.init(:path => 'config', :env => 'env') do
+        subject.new(:path => 'config', :env => 'env') do
           confname :skip_env => true, &block
         end
       end
@@ -113,7 +115,7 @@ describe AppSent do
     end
 
     it "should create corresponding constants with values" do
-      AppSent.init(@right_params) do
+      subject.new(@right_params) do
         simple_config
         database do
           username String

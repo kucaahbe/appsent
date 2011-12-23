@@ -1,3 +1,3 @@
-class AppSent
+module AppSent
   VERSION = "0.0.4"
 end
