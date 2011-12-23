@@ -42,20 +42,6 @@ describe AppSent::Settings do
       subject.send(:class_variable_get,:@@environment).should eq('test')
     end
 
-    it "should save array of configs to @@configs" do
-      subject.new(@right_params) do
-        simple_config
-        database do
-          username String
-          password String
-          port     Fixnum
-        end
-
-        simple_config_with_just_type Array
-      end
-      subject.config_files.should eq(%w(simple_config database simple_config_with_just_type))
-    end
-
     context "should send right variables to AppSent::ConfigFile" do
 
       let(:mock_config_file) { mock(AppSent::ConfigFile, :valid? => true, :constantized => 'STR', :data => 'data') }

@@ -3,7 +3,6 @@ module AppSent
 
     @@config_path  = nil
     @@environment  = nil
-    @@config_files = []
 
     def initialize opts={}, &block
       raise ConfigPathNotSet  unless opts[:path]
@@ -21,10 +20,6 @@ module AppSent
       else
         raise AppSent::Error, __full_error_message__
       end
-    end
-
-    def self.config_files
-      @@config_files
     end
 
     def self.config_path
@@ -54,9 +49,7 @@ module AppSent
     private
 
     def method_missing config, *args, &block
-      config = config.to_s
-      @@config_files << config
-      @configs << ConfigFile.new(@@config_path,config,@@environment,*args,&block)
+      @configs << ConfigFile.new(@@config_path, config.to_s, @@environment, *args, &block)
     end
   end
 end
