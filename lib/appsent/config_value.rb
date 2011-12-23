@@ -108,9 +108,9 @@ class AppSent
 
     def method_missing option, *opts, &block
       self.child_options << self.class.new(
-	option.to_s,
-	data[option.to_sym],
-	*opts,
+        option.to_s,
+        data[option.to_sym],
+        *opts,
         &block
       )
       self.child_options.last.nesting+=(self.nesting+1)

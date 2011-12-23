@@ -21,28 +21,28 @@ class AppSent
 
       yaml_data = YAML.load_file(@path_to_config)
       if yaml_data.is_a?(Hash)
-	yaml_data.symbolize_keys!
+        yaml_data.symbolize_keys!
       else
-	# yaml is not valid YAML file, TODO change error message
-	@self_error_msg = ENVIRONMENT_NOT_FOUND_ERROR_MSG % [relative_path_to_config,@environment]
-	return @valid = false
+        # yaml is not valid YAML file, TODO change error message
+        @self_error_msg = ENVIRONMENT_NOT_FOUND_ERROR_MSG % [relative_path_to_config,@environment]
+        return @valid = false
       end
 
       @data = yaml_data[@environment]
 
       @valid = if @data.instance_of?(@type)
-		   @data.symbolize_keys! if @type==Hash
-		   if @block
-		     self.instance_exec(&@block)
-		     @self_error_msg = WRONG_CONFIG_ERROR_MSG % relative_path_to_config
-		     options.ask_all? { |option| option.valid? }
-		   else
-		     true
-		   end
-		 else
-                   @self_error_msg = (WRONG_CONFIG_ERROR_MSG % relative_path_to_config) + "  '#{@environment}' entry should contain #{@type}"
-		   false
-		 end
+                 @data.symbolize_keys! if @type==Hash
+                 if @block
+                   self.instance_exec(&@block)
+                   @self_error_msg = WRONG_CONFIG_ERROR_MSG % relative_path_to_config
+                   options.ask_all? { |option| option.valid? }
+                 else
+                   true
+                 end
+               else
+                 @self_error_msg = (WRONG_CONFIG_ERROR_MSG % relative_path_to_config) + "  '#{@environment}' entry should contain #{@type}"
+                 false
+               end
     rescue Errno::ENOENT
       @self_error_msg = CONFIG_NOT_FOUND_ERROR_MSG % relative_path_to_config
       @valid = false
