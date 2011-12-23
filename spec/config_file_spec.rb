@@ -4,6 +4,9 @@ describe AppSent::ConfigFile do
 
   subject { described_class }
 
+  let(:fake_config_filename) { '/path/to/config/config_name.yml' }
+  let(:fixtures_path) { './fixtures' }
+
   before :each do
     @params = {
       'config_path' => '/path/to/config',
@@ -12,8 +15,6 @@ describe AppSent::ConfigFile do
       'type'        =>  Hash
     }
   end
-
-  let(:fake_config_filename) { '/path/to/config/config_name.yml' }
 
   let(:params) do
     [
@@ -41,7 +42,7 @@ describe AppSent::ConfigFile do
           String
         ).and_return(mock_config_value)
 
-        AppSent.init(:path => '../fixtures', :env => 'test') do
+        AppSent.init(:path => fixtures_path, :env => 'test') do
           database do
             username String
           end
@@ -57,7 +58,7 @@ describe AppSent::ConfigFile do
           &block
         ).and_return(mock_config_value)
 
-        AppSent.init(:path => '../fixtures', :env => 'test') do
+        AppSent.init(:path => fixtures_path, :env => 'test') do
           database do
             username String, &block
           end
@@ -72,7 +73,7 @@ describe AppSent::ConfigFile do
           'description'
         ).and_return(mock_config_value)
 
-        AppSent.init(:path => '../fixtures', :env => 'test') do
+        AppSent.init(:path => fixtures_path, :env => 'test') do
           database do
             username String, 'description'
           end
@@ -87,7 +88,7 @@ describe AppSent::ConfigFile do
           'description' => 'user'
         ).and_return(mock_config_value)
 
-        AppSent.init(:path => '../fixtures', :env => 'test') do
+        AppSent.init(:path => fixtures_path, :env => 'test') do
           database do
             username String, 'description' => 'user'
           end
