@@ -6,12 +6,6 @@ describe AppSent::Settings do
 
   let(:fixtures_path) { File.expand_path(File.join(File.dirname(__FILE__),'fixtures')) }
 
-  before :each do
-    subject.send :class_variable_set,:@@config_path,nil
-    subject.send :class_variable_set,:@@environment,nil
-    subject.send :class_variable_set,:@@config_files,[]
-  end
-
   context ".new" do
 
     before :each do
@@ -33,13 +27,13 @@ describe AppSent::Settings do
     end
 
     it "should save config path to @@config_path" do
-      subject.new(@right_params) do; end
-      subject.config_path.should eq(fixtures_path)
+      s = subject.new(@right_params) do; end
+      s.config_path.should eq(fixtures_path)
     end
 
     it "should save environment to @@environment" do
-      subject.new(@right_params) do; end
-      subject.send(:class_variable_get,:@@environment).should eq('test')
+      s = subject.new(@right_params) do; end
+      s.environment.should eq('test')
     end
 
     context "should send right variables to AppSent::ConfigFile" do

@@ -1,17 +1,15 @@
 module AppSent
   class Settings
-
-    @@config_path  = nil
-    @@environment  = nil
-
+    attr_reader :config_path, :environment
+    
     def initialize opts={}, &block
       raise ConfigPathNotSet  unless opts[:path]
       raise EnvironmentNotSet unless opts[:env]
       raise "caller path does not set" unless opts[:caller]
       raise BlockRequired     unless block_given?
 
-      @@config_path = File.expand_path(File.join(File.dirname(opts[:caller]),opts[:path]))
-      @@environment = opts[:env]
+      @config_path = File.expand_path(File.join(File.dirname(opts[:caller]),opts[:path]))
+      @environment = opts[:env]
 
       @configs = []
       self.instance_exec(&block)
@@ -20,10 +18,6 @@ module AppSent
       else
         raise AppSent::Error, __full_error_message__
       end
-    end
-
-    def self.config_path
-      @@config_path
     end
 
     private
@@ -49,7 +43,7 @@ module AppSent
     private
 
     def method_missing config, *args, &block
-      @configs << ConfigFile.new(@@config_path, config.to_s, @@environment, *args, &block)
+      @configs << ConfigFile.new(@config_path, config.to_s, @environment, *args, &block)
     end
   end
 end
