@@ -4,11 +4,12 @@ TODO
 * rails support
 * Conffile support
   * own settings constant
-* internal rewrites and cleanup
-* fix little errors and typos
 
 0.1.0
 -----
+
+* internal rewrites and cleanup
+* fixed little errors and typos
 
 0.0.4
 -----
