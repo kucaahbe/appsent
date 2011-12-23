@@ -18,30 +18,30 @@ module AppSent
 
     def valid?
       return @valid if defined?(@valid)
-      validate!
-    end
-
-    def _options
-      @options ||= []
+      __validate__!
     end
 
     def constantized
       @config_file_name.upcase
     end
 
-    def error_message
-      @self_error_msg += self._options.map { |o| o.valid? ? nil : o.error_message }.compact.join("\n")
-    end
-
     private
 
-    def validate!
+    def __error_message__
+      @self_error_msg += __options__.map { |o| o.valid? ? nil : o.send(:__error_message__) }.compact.join("\n")
+    end
+
+    def __options__
+      @options ||= []
+    end
+
+    def __validate__!
       yaml_data = YAML.load_file(@path_to_config)
       if yaml_data.is_a?(Hash)
         yaml_data.symbolize_keys!
       else
         # yaml is not valid YAML file, TODO change error message
-        @self_error_msg = ENVIRONMENT_NOT_FOUND_ERROR_MSG % [relative_path_to_config,@environment]
+        @self_error_msg = ENVIRONMENT_NOT_FOUND_ERROR_MSG % [__relative_path_to_config__,@environment]
         return @valid = false
       end
 
@@ -51,26 +51,26 @@ module AppSent
                  @data.symbolize_keys! if @type==Hash
                  if @block
                    self.instance_exec(&@block)
-                   @self_error_msg = WRONG_CONFIG_ERROR_MSG % relative_path_to_config
-                   _options.ask_all? { |option| option.valid? }
+                   @self_error_msg = WRONG_CONFIG_ERROR_MSG % __relative_path_to_config__
+                   __options__.ask_all? { |option| option.valid? }
                  else
                    true
                  end
                else
-                 @self_error_msg = (WRONG_CONFIG_ERROR_MSG % relative_path_to_config) + "  '#{@environment}' entry should contain #{@type}"
+                 @self_error_msg = (WRONG_CONFIG_ERROR_MSG % __relative_path_to_config__) + "  '#{@environment}' entry should contain #{@type}"
                  false
                end
     rescue Errno::ENOENT
-      @self_error_msg = CONFIG_NOT_FOUND_ERROR_MSG % relative_path_to_config
+      @self_error_msg = CONFIG_NOT_FOUND_ERROR_MSG % __relative_path_to_config__
       @valid = false
     end
 
-    def relative_path_to_config
+    def __relative_path_to_config__
       @path_to_config.gsub(Dir.pwd+File::SEPARATOR,'')
     end
 
     def method_missing option, *args, &block
-      self._options << ConfigValue.new(option.to_s, @data[option.to_sym], *args, &block)
+      __options__ << ConfigValue.new(option.to_s, @data[option.to_sym], *args, &block)
     end
 
   end

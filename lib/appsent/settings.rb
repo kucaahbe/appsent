@@ -16,10 +16,10 @@ module AppSent
 
       @configs=[]
       self.instance_exec(&block)
-      if all_valid?
-        load!
+      if __valid__?
+        __load__!
       else
-        raise AppSent::Error, self.full_error_message
+        raise AppSent::Error, __full_error_message__
       end
     end
 
@@ -31,20 +31,22 @@ module AppSent
       @@config_path
     end
 
-    def all_valid?
+    private
+
+    def __valid__?
       @configs.ask_all? { |conf_file| conf_file.valid? }
     end
 
-    def load!
+    def __load__!
       @configs.each do |config|
         AppSent.const_set(config.constantized,config.data)
       end
     end
 
-    def full_error_message
+    def __full_error_message__
       error_description = ''
       @configs.each do |config|
-        error_description += config.error_message+"\n" unless config.valid?
+        error_description += config.send(:__error_message__)+"\n" unless config.valid?
       end
       "failed to load some configuration files\n\n"+error_description
     end

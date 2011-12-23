@@ -27,7 +27,7 @@ describe AppSent::ConfigFile do
 
   context ".new" do
 
-    %w(valid? _options constantized error_message).each do |method|
+    %w(valid? constantized).each do |method|
       it { subject.new(*params).should respond_to(method)}
     end
 

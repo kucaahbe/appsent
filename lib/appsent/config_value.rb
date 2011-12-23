@@ -34,22 +34,24 @@ module AppSent
 
     def valid?
       return @valid if defined?(@valid)
-      validate!
+      __validate__!
     end
 
-    def child_options
+    private
+
+    def __child_options__
       @options ||= []
     end
 
-    def child_options_valid?
+    def __child_options_valid__?
       return @child_options_valid if defined?(@child_options_valid)
       true
     end
 
-    def error_message
+    def __error_message__
       actual_data_or_example = ((data_type==Hash ? '' : data) or example)
 
-      actual_error_msg = if child_options_valid?
+      actual_error_msg = if __child_options_valid__?
                            (data ? VALUE_WRONG_TYPE_MSG % [data_type] : VALUE_NOT_EXISTS_MSG)
                          else
                            WRONG_CHILD_OPTIONS_MSG
@@ -60,21 +62,19 @@ module AppSent
       optional_type = (data ? '' : ', '+data_type.inspect)
 
       @error_message = '  '*(self.nesting+1)+FULL_ERROR_MESSAGE % [parameter, actual_data_or_example, actual_error_msg, desc, optional_type]
-      if child_options_valid?
+      if __child_options_valid__?
         return @error_message
       else
-        @error_message += "\n"+child_options.map { |o| o.valid? ? nil : o.error_message }.compact.join("\n")
+        @error_message += "\n"+__child_options__.map { |o| o.valid? ? nil : o.send(:__error_message__) }.compact.join("\n")
       end
     end
 
-    private
-
-    def validate!
+    def __validate__!
       @valid = if data.instance_of?(data_type)
                  if @block
                    if data.is_a?(Array)
                      data.each do |data|
-                       child_options << self.class.new(
+                       __child_options__ << self.class.new(
                          @parameter,
                          Hash,
                          data,
@@ -88,7 +88,7 @@ module AppSent
                      self.instance_exec(&@block)
                    end
 
-                   @child_options_valid = child_options.ask_all? { |option| option.valid? }
+                   @child_options_valid = __child_options__.ask_all? { |option| option.valid? }
                  else
                    true
                  end
@@ -98,13 +98,13 @@ module AppSent
     end
 
     def method_missing option, *opts, &block
-      self.child_options << self.class.new(
+      __child_options__ << self.class.new(
         option.to_s,
         data[option.to_sym],
         *opts,
         &block
       )
-      self.child_options.last.nesting+=(self.nesting+1)
+      __child_options__.last.nesting+=(self.nesting+1)
     end
   end
 end

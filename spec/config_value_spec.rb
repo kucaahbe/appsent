@@ -30,7 +30,7 @@ describe AppSent::ConfigValue do
 
   context ".new" do
 
-    %w(valid? child_options error_message).each do |method|
+    %w(valid?).each do |method|
       it { subject.new(*params).should respond_to(method)}
     end
 
@@ -158,7 +158,7 @@ describe AppSent::ConfigValue do
         @params['type']    = String
         @params['desc']    = 'Database name'
         @params['example'] = 'localhost'
-        subject.error_message.should eq("  database: localhost # does not exist(Database name), String")
+        subject.send(:__error_message__).should eq("  database: localhost # does not exist(Database name), String")
       end
 
       it "without example value" do
@@ -167,7 +167,7 @@ describe AppSent::ConfigValue do
         @params['type']    = String
         @params['desc']    = 'Database name'
         @params.delete('example')
-        subject.error_message.should eq("  database:  # does not exist(Database name), String")
+        subject.send(:__error_message__).should eq("  database:  # does not exist(Database name), String")
       end
 
       it "without description" do
@@ -176,7 +176,7 @@ describe AppSent::ConfigValue do
         @params['type']    = String
         @params.delete('desc')
         @params['example'] = 'localhost'
-        subject.error_message.should eq("  database: localhost # does not exist, String")
+        subject.send(:__error_message__).should eq("  database: localhost # does not exist, String")
       end
 
       it "without example and description" do
@@ -185,7 +185,7 @@ describe AppSent::ConfigValue do
         @params['type']    = String
         @params.delete('desc')
         @params.delete('example')
-        subject.error_message.should eq("  database:  # does not exist, String")
+        subject.send(:__error_message__).should eq("  database:  # does not exist, String")
       end
 
     end
@@ -198,7 +198,7 @@ describe AppSent::ConfigValue do
         @params['type']    = String
         @params['desc']    = 'Database name'
         @params['example'] = 'localhost'
-        subject.error_message.should eq("  database: 20 # wrong type,should be String(Database name)")
+        subject.send(:__error_message__).should eq("  database: 20 # wrong type,should be String(Database name)")
       end
 
       it "without example value" do
@@ -207,7 +207,7 @@ describe AppSent::ConfigValue do
         @params['type']    = String
         @params['desc']    = 'Database name'
         @params.delete('example')
-        subject.error_message.should eq("  database: 20 # wrong type,should be String(Database name)")
+        subject.send(:__error_message__).should eq("  database: 20 # wrong type,should be String(Database name)")
       end
 
       it "without description" do
@@ -216,7 +216,7 @@ describe AppSent::ConfigValue do
         @params['type']    = String
         @params.delete('desc')
         @params['example'] = 'localhost'
-        subject.error_message.should eq("  database: 20 # wrong type,should be String")
+        subject.send(:__error_message__).should eq("  database: 20 # wrong type,should be String")
       end
 
       it "without example and description" do
@@ -225,7 +225,7 @@ describe AppSent::ConfigValue do
         @params['type']    = String
         @params.delete('desc')
         @params.delete('example')
-        subject.error_message.should eq("  database: 20 # wrong type,should be String")
+        subject.send(:__error_message__).should eq("  database: 20 # wrong type,should be String")
       end
 
     end
