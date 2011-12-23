@@ -12,8 +12,7 @@ module AppSent
 
       @type = opts.empty? ? Hash : opts.first
       @type = @type[:type] if @type.is_a?(Hash)
-      raise "params #{@type} and block given" if block_given? and not @type==Hash
-      @path_to_config = File.join(@config_dir,@config_file_name+'.yml')
+      raise "params #{@type} and block given" if block_given? and not @type == Hash
       @self_error_msg = ''
     end
 
@@ -27,12 +26,16 @@ module AppSent
 
     private
 
+    def path_to_config
+      @path_to_config ||= File.join(@config_dir, @config_file_name + '.yml')      
+    end
+    
     def __error_message__
       @self_error_msg += options.map { |o| o.valid? ? nil : o.send(:__error_message__) }.compact.join("\n")
     end
 
     def __validate__!
-      yaml_data = YAML.load_file(@path_to_config)
+      yaml_data = YAML.load_file(path_to_config)
       if yaml_data.is_a?(Hash)
         yaml_data.symbolize_keys!
       else
@@ -63,7 +66,7 @@ module AppSent
     end
 
     def __relative_path_to_config__
-      @path_to_config.gsub(Dir.pwd + File::SEPARATOR, '')
+      path_to_config.gsub(Dir.pwd + File::SEPARATOR, '')
     end
 
     def method_missing option, *args, &block
