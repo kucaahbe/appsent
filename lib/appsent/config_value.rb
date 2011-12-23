@@ -4,7 +4,7 @@ module AppSent
     attr_accessor :nesting
 
     WRONG_DATA_TYPE_PASSED_MSG = "data type should be ruby class!"
-    VALUE_NOT_EXISTS_MSG       = "does not exists"
+    VALUE_NOT_EXISTS_MSG       = "does not exist"
     VALUE_WRONG_TYPE_MSG       = "wrong type,should be %s"
     FULL_ERROR_MESSAGE         = "%s: %s # %s%s%s"
     WRONG_CHILD_OPTIONS_MSG    = "wrong nested parameters"
