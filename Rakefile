@@ -2,6 +2,10 @@ require 'bundler/setup'
 require 'rspec/core/rake_task'
 require 'cucumber'
 require 'cucumber/rake/task'
+begin
+require 'relish/rake/tasks'
+rescue LoadError
+end
 Bundler::GemHelper.install_tasks
 
 task :default => [:spec, :features]
@@ -28,3 +32,12 @@ Cucumber::Rake::Task.new(:features) do |t|
 end
 desc "alias for 'features'"
 task :cucumber => :features
+
+if defined?(Relish)
+namespace :relish do
+  Relish::Rake::PushTask.new(:push) do |t|
+    t.project_name = 'appsent'
+    t.version      = AppSent::VERSION
+  end
+end
+end
