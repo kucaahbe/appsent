@@ -14,7 +14,7 @@ describe AppSent::Settings do
 
   context ".new" do
 
-    subject { described_class.new(:env=>'production',:path => '/etc') do end; }
+    subject { described_class.new(:env=>'production',:path => '/etc', :caller => 'path.rb') do end; }
 
     %w(all_valid? load! full_error_message).each do |method|
       it { should respond_to(method) }
@@ -25,7 +25,7 @@ describe AppSent::Settings do
   context ".new" do
 
     before :each do
-      @right_params = { :path => 'fixtures', :env => 'test' }
+      @right_params = { :path => 'fixtures', :env => 'test', :caller => __FILE__ }
     end
 
     it "should require config path" do
@@ -77,7 +77,7 @@ describe AppSent::Settings do
           'env'
         ).and_return(mock_config_file)
 
-        subject.new(:path => 'config', :env => 'env') do
+        subject.new(:path => 'config', :env => 'env', :caller => __FILE__) do
           confname
         end
       end
@@ -91,7 +91,7 @@ describe AppSent::Settings do
           &block
         ).and_return(mock_config_file)
 
-        subject.new(:path => 'config', :env => 'env') do
+        subject.new(:path => 'config', :env => 'env', :caller => __FILE__) do
           confname &block
         end
       end
