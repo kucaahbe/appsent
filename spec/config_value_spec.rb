@@ -42,22 +42,22 @@ describe AppSent::ConfigValue do
     context "with &block given" do
 
       let(:block) do
-	lambda { value String }
+        lambda { value String }
       end
 
       it "should not raise exception if data type is Array" do
-	@params['type'] = Array
-	expect { subject.new(*params,&block) }.to_not raise_exception(/params Array and block given/)
+        @params['type'] = Array
+        expect { subject.new(*params,&block) }.to_not raise_exception(/params Array and block given/)
       end
 
       it "should not raise exception if data type is Hash" do
-	@params['type'] = Hash
-	expect { subject.new(*params,&block) }.to_not raise_exception(/params Hash and block given/)
+        @params['type'] = Hash
+        expect { subject.new(*params,&block) }.to_not raise_exception(/params Hash and block given/)
       end
 
       it "should raise exception if data type is not Hash" do
-	@params['type'] = Fixnum
-	expect { subject.new(*params,&block) }.to raise_exception(/params Fixnum and block given/)
+        @params['type'] = Fixnum
+        expect { subject.new(*params,&block) }.to raise_exception(/params Fixnum and block given/)
       end
 
     end
@@ -70,41 +70,41 @@ describe AppSent::ConfigValue do
 
       it "if entry does not presence in config file" do
         @params['value']=nil
-	subject.new(*params).should_not be_valid
+        subject.new(*params).should_not be_valid
       end
 
       it "if data in config file has wrong type" do
         @params['type']=Array
         @params['value']='string'
-	subject.new(*params).should_not be_valid
+        subject.new(*params).should_not be_valid
       end
 
       it "if child value is not valid" do
-	@params['type']=Hash
-	@params['value']={:value => 100500}
-	values_block = lambda {
-	  value String
-	}
-	subject.new(*params,&values_block).should_not be_valid
+        @params['type']=Hash
+        @params['value']={:value => 100500}
+        values_block = lambda {
+          value String
+        }
+        subject.new(*params,&values_block).should_not be_valid
       end
 
       context "with type => Array", :wip => true do
 
-	it "if actual data is not array" do
-	  @params['type']=Array
-	  @params['value']=123
-	  subject.new(*params).should_not be_valid
-	end
+        it "if actual data is not array" do
+          @params['type']=Array
+          @params['value']=123
+          subject.new(*params).should_not be_valid
+        end
 
-	it "if actual data is an array of wrong hashes" do
-	  @params['type']=Array
-	  @params['value']=[1,2]
-	  values_block = lambda {
-	    value1 String
-	    value2 Fixnum
-	  }
-	  subject.new(*params,&values_block).should_not be_valid
-	end
+        it "if actual data is an array of wrong hashes" do
+          @params['type']=Array
+          @params['value']=[1,2]
+          values_block = lambda {
+            value1 String
+            value2 Fixnum
+          }
+          subject.new(*params,&values_block).should_not be_valid
+        end
 
       end
 
@@ -113,32 +113,32 @@ describe AppSent::ConfigValue do
     context "should return true" do
 
       it "if entry presence and has right type" do
-	subject.new(*params).should be_valid
+        subject.new(*params).should be_valid
       end
 
       it "if valid itself and child values valid too" do
-	@params['type']=Hash
-	@params['value']={'value' => 'some data'}
-	values_block = lambda {
-	  value String
-	}
-	subject.new(*params,&values_block).should be_valid
+        @params['type']=Hash
+        @params['value']={'value' => 'some data'}
+        values_block = lambda {
+          value String
+        }
+        subject.new(*params,&values_block).should be_valid
       end
 
       context "with type => Array", :wip => true do
 
-	it "if actual data is an array of right hashes" do
-	  @params['type']=Array
-	  @params['value']=[
-	    {'value1' =>'qwe', 'value2' => 123 },
-	    {'value1' =>'rty', 'value2' => 456 }
-	  ]
-	  values_block = lambda {
-	    value1 String
-	    value2 Fixnum
-	  }
-	  subject.new(*params,&values_block).should be_valid
-	end
+        it "if actual data is an array of right hashes" do
+          @params['type']=Array
+          @params['value']=[
+            {'value1' =>'qwe', 'value2' => 123 },
+            {'value1' =>'rty', 'value2' => 456 }
+          ]
+          values_block = lambda {
+            value1 String
+            value2 Fixnum
+          }
+          subject.new(*params,&values_block).should be_valid
+        end
 
       end
 
