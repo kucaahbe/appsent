@@ -6,20 +6,25 @@ Bundler::GemHelper.install_tasks
 
 task :default => [:spec, :features]
 
-RSpec::Core::RakeTask.new(:spec) do |t|
-  t.rspec_opts='--tag ~wip'
-end
-
 namespace :spec do
 
+  desc "" # to hide task
+  RSpec::Core::RakeTask.new(:default) do |t|
+    t.rspec_opts='--tag ~wip'
+  end
+
+  desc "run work in progress specs"
   RSpec::Core::RakeTask.new(:wip) do |t|
     t.rspec_opts='--tag wip'
   end
 
 end
+desc "run specs"
+task :spec => 'spec:default'
 
 Cucumber::Rake::Task.new(:features) do |t|
   t.profile = 'default'
   t.fork = true
 end
+desc "alias for 'features'"
 task :cucumber => :features
