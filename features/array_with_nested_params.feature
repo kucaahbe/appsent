@@ -2,23 +2,23 @@
 Feature: Array with nested params
 
   Background:
-    Given a file named "my_app.rb" with:
+    Given a file named "Conffile" with:
+    """
+    mongodb do
+      host      String, 'Host to connect to MongoDB' => 'localhost'
+      port      Fixnum, 'MongoDB port'               => 27017
+
+      slaves Array do
+        host    String, 'mongo slave host' => 'host.com'
+        port    Fixnum, 'mongo slave port' => 27018
+      end
+    end
+    """
+    And a file named "my_app.rb" with:
     """
     require 'appsent'
 
-    AppSent.init :path => 'config', :env => 'production' do
-
-      mongodb do
-        host      String, 'Host to connect to MongoDB' => 'localhost'
-        port      Fixnum, 'MongoDB port'               => 27017
-
-        slaves Array do
-          host    String, 'mongo slave host' => 'host.com'
-          port    Fixnum, 'mongo slave port' => 27018
-        end
-      end
-
-    end
+    AppSent.init :path => 'config', :env => 'production'
 
     puts 'All stuff work!'
     """

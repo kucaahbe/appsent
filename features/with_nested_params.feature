@@ -1,21 +1,23 @@
 Feature: Usage with nested params example
 
   Background:
+    Given a file named "Conffile" with:
+    """
+    system_config do
+
+      google_analytics do
+        code              String, 'Enter your google analytics code here' => 'UA-12345678-1'
+        multiple_domains  String, 'has multiple domains?'
+        domain            String, 'your domain' => 'example.com'
+      end
+
+    end
+    """
     Given a file named "my_app.rb" with:
     """
     require 'appsent'
 
-    AppSent.init :path => 'config', :env => 'production' do
-      system_config do
-
-        google_analytics do
-          code              String, 'Enter your google analytics code here' => 'UA-12345678-1'
-          multiple_domains  String, 'has multiple domains?'
-          domain            String, 'your domain' => 'example.com'
-        end
-
-      end
-    end
+    AppSent.init :path => 'config', :env => 'production'
 
     puts 'All stuff work!'
     """
@@ -41,7 +43,7 @@ Feature: Usage with nested params example
     Then the output should contain:
     """
     wrong config file 'config/system_config.yml':
-      google_analytics:  # does not exists, Hash
+      google_analytics:  # does not exist, Hash
     """
 
   Scenario: Nested parameters does not specified
@@ -57,8 +59,8 @@ Feature: Usage with nested params example
     """
     wrong config file 'config/system_config.yml':
       google_analytics:  # wrong nested parameters
-        code: UA-12345678-1 # does not exists(Enter your google analytics code here), String
-        multiple_domains:  # does not exists(has multiple domains?), String
+        code: UA-12345678-1 # does not exist(Enter your google analytics code here), String
+        multiple_domains:  # does not exist(has multiple domains?), String
     """
 
   Scenario: Some nested parameters are wrong type

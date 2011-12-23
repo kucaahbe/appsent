@@ -8,10 +8,10 @@ module AppSent
     def initialize opts={}, &block
       raise ConfigPathNotSet  unless opts[:path]
       raise EnvironmentNotSet unless opts[:env]
+      raise "caller path does not set" unless opts[:caller]
       raise BlockRequired     unless block_given?
 
-      caller_filename =  caller.first.split(':').first
-      @@config_path = File.expand_path(File.join(File.dirname(caller_filename),opts[:path]))
+      @@config_path = File.expand_path(File.join(File.dirname(opts[:caller]),opts[:path]))
       @@environment = opts[:env]
 
       @configs=[]
@@ -19,7 +19,7 @@ module AppSent
       if all_valid?
         load!
       else
-        raise AppSent::Error, settings.full_error_message
+        raise AppSent::Error, self.full_error_message
       end
     end
 

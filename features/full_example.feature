@@ -1,31 +1,32 @@
 Feature: Complex usage
 
   Background:
-    Given a file named "my_app.rb" with:
+    Given a file named "Conffile" with:
+    """
+    system_config do
+
+      google_analytics do
+        code              String, 'Enter your google analytics code here' => 'UA-12345678-1'
+        multiple_domains  String, 'has multiple domains?'
+        domain            String, 'your domain' => 'example.com'
+      end
+
+      system_email String, :example => 'admin@example.com'
+
+    end
+
+    mongodb do
+      host       String, 'Host to connect to MongoDB' => 'localhost'
+      port       Fixnum, 'MongoDB port' => 27017
+      pool_size  Fixnum
+      timeout    Fixnum
+    end
+    """
+    And a file named "my_app.rb" with:
     """
     require 'appsent'
 
-    AppSent.init :path => 'config', :env => 'production' do
-      system_config do
-
-        google_analytics do
-          code              String, 'Enter your google analytics code here' => 'UA-12345678-1'
-          multiple_domains  String, 'has multiple domains?'
-          domain            String, 'your domain' => 'example.com'
-        end
-
-        system_email String, :example => 'admin@example.com'
-
-      end
-
-      mongodb do
-        host       String, 'Host to connect to MongoDB' => 'localhost'
-        port       Fixnum, 'MongoDB port' => 27017
-        pool_size  Fixnum
-        timeout    Fixnum
-      end
-
-    end
+    AppSent.init :path => 'config', :env => 'production'
 
     puts 'All stuff work!'
     """

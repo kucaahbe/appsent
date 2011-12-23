@@ -1,20 +1,22 @@
 Feature: Simple usage example
 
   Background:
-    Given a file named "my_app.rb" with:
+    Given a file named "Conffile" with:
+    """
+    mongodb do
+      host  String, 'Host to connect to MongoDB' => 'localhost'
+      port  Fixnum, 'MongoDB port'               => 27017
+    end
+    """
+    And a file named "my_app.rb" with:
     """
     require 'appsent'
 
-    AppSent.init :path => 'config', :env => 'production' do
-      mongodb do
-        host  String, 'Host to connect to MongoDB' => 'localhost'
-        port  Fixnum, 'MongoDB port'               => 27017
-      end
-    end
+    AppSent.init :path => 'config', :env => 'production'
 
     puts 'All stuff work!'
     """
-  Scenario: config does not exists
+  Scenario: config does not exist
     When I run `ruby my_app.rb`
     Then the output should contain:
     """
@@ -39,8 +41,8 @@ Feature: Simple usage example
     Then the output should contain:
     """
     wrong config file 'config/mongodb.yml':
-      host: localhost # does not exists(Host to connect to MongoDB), String
-      port: 27017 # does not exists(MongoDB port), Fixnum
+      host: localhost # does not exist(Host to connect to MongoDB), String
+      port: 27017 # does not exist(MongoDB port), Fixnum
     """
 
   Scenario: Some parameter is wrong type
