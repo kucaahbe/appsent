@@ -7,7 +7,7 @@ class Hash
   end
 end
 
-class Array
+module Enumerable
   def ask_all? &block
     result = []
     self.each do |el|
